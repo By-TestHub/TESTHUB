@@ -3,10 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TESTHUB-SHOP - ร้านขายไอดีไก่ตันอัตโนมัติ</title>
-    <!-- นำเข้า Tailwind CSS -->
+    <title>TESTHUB-SHOP</title>
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
-    <!-- นำเข้า Font Awesome ไอคอน -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700&display=swap');
@@ -15,7 +13,7 @@
 </head>
 <body class="bg-slate-50 text-slate-800 min-h-screen flex flex-col">
 
-    <!-- 1. แถบเมนูด้านบน (Navbar) -->
+    <!-- 1. แถบเมนูด้านบน (Navbar) รองรับมือถือและคอม -->
     <nav class="bg-blue-600 text-white shadow-md sticky top-0 z-50">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex items-center justify-between h-16">
@@ -24,32 +22,40 @@
                     <span class="font-bold text-xl tracking-wider">TESTHUB-SHOP</span>
                 </div>
                 
-                <!-- ปุ่มเมนูหลัก สลับหน้าจอ -->
                 <div class="hidden md:flex space-x-2 items-center">
                     <button onclick="switchPage('home')" id="nav-home" class="px-3 py-2 rounded-md text-sm font-medium bg-blue-700 cursor-pointer"><i class="fa-solid fa-house mr-1"></i> หน้าหลัก</button>
                     <button onclick="switchPage('topup')" id="nav-topup" class="px-3 py-2 rounded-md text-sm font-medium hover:bg-blue-500 transition cursor-pointer"><i class="fa-solid fa-wallet mr-1"></i> เติมเงิน</button>
                     <button onclick="switchPage('history')" id="nav-history" class="px-3 py-2 rounded-md text-sm font-medium hover:bg-blue-500 transition cursor-pointer"><i class="fa-solid fa-history mr-1"></i> ประวัติการใช้งาน</button>
                 </div>
 
-                <!-- ส่วนแสดงสถานะผู้ใช้ -->
-                <div class="flex items-center space-x-4">
-                    <div id="user-status" class="hidden flex items-center space-x-3">
+                <div class="flex items-center space-x-2">
+                    <div id="user-status" class="hidden flex items-center space-x-2">
                         <div class="bg-blue-700 px-3 py-1.5 rounded-full text-sm font-medium border border-blue-400">
                             <i class="fa-solid fa-coins text-amber-400 mr-1"></i> Points: <span id="user-points" class="font-bold">0</span>
                         </div>
-                        <span id="user-display-name" class="text-sm font-medium bg-blue-800 px-3 py-1.5 rounded-md"></span>
-                        <button onclick="logout()" class="text-red-200 hover:text-white text-sm font-medium transition cursor-pointer"><i class="fa-solid fa-right-from-bracket"></i></button>
+                        <span id="user-display-name" class="text-sm font-medium bg-blue-800 px-2.5 py-1.5 rounded-md hidden sm:inline"></span>
+                        <button onclick="logout()" class="text-red-200 hover:text-white p-1.5 text-sm font-medium transition cursor-pointer"><i class="fa-solid fa-right-from-bracket"></i></button>
                     </div>
 
                     <button id="login-btn" onclick="openModal()" class="bg-cyan-400 hover:bg-cyan-300 text-blue-900 px-4 py-1.5 rounded-md text-sm font-bold transition shadow-sm cursor-pointer">
                         <i class="fa-solid fa-right-to-bracket mr-1"></i> เข้าสู่ระบบ
                     </button>
+
+                    <button onclick="toggleMobileMenu()" class="md:hidden text-white p-2 focus:outline-none cursor-pointer">
+                        <i class="fa-solid fa-bars text-xl"></i>
+                    </button>
                 </div>
             </div>
         </div>
+
+        <div id="mobile-menu" class="hidden md:hidden bg-blue-700 px-4 pt-2 pb-4 space-y-1 border-t border-blue-500">
+            <button onclick="switchPage('home'); toggleMobileMenu();" class="block w-full text-left px-3 py-2 rounded-md text-base font-medium text-white hover:bg-blue-600"><i class="fa-solid fa-house mr-2"></i>หน้าหลัก</button>
+            <button onclick="switchPage('topup'); toggleMobileMenu();" class="block w-full text-left px-3 py-2 rounded-md text-base font-medium text-white hover:bg-blue-600"><i class="fa-solid fa-wallet mr-2"></i>เติมเงิน</button>
+            <button onclick="switchPage('history'); toggleMobileMenu();" class="block w-full text-left px-3 py-2 rounded-md text-base font-medium text-white hover:bg-blue-600"><i class="fa-solid fa-history mr-2"></i>ประวัติการใช้งาน</button>
+        </div>
     </nav>
 
-    <!-- 2. ระบบจัดการหลังบ้านของแอดมิน (จะโผล่เมื่อล็อกอินแอดมินเท่านั้น) -->
+    <!-- 2. แอดมินจัดการหลังบ้าน -->
     <div id="admin-panel" class="hidden max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 mt-6">
         <div class="bg-white rounded-2xl p-6 shadow-sm border border-amber-200 bg-gradient-to-b from-amber-50/30 to-white">
             <div class="flex items-center space-x-2 border-b border-amber-200 pb-3 mb-4">
@@ -66,8 +72,7 @@
     </div>
 
     <!-- ================= PAGE 1: HOME ================= -->
-    <div id="page-home" class="page-content max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 mt-6 flex-grow">
-        <!-- แบนเนอร์ -->
+    <div id="page-home" class="page-content max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 mt-6 flex-grow p-2">
         <div class="bg-gradient-to-r from-blue-500 to-cyan-500 rounded-2xl p-8 text-white shadow-lg flex flex-col md:flex-row items-center justify-between min-h-[200px] mb-8">
             <div class="space-y-2">
                 <span class="bg-blue-700/50 text-cyan-200 text-xs px-3 py-1 rounded-full font-bold">TESTHUB-SHOP ONLINE</span>
@@ -80,24 +85,12 @@
             </div>
         </div>
 
-        <!-- รายการสินค้า -->
         <div class="flex items-center space-x-2 border-b-2 border-blue-500 pb-2 mb-6">
             <i class="fa-solid fa-fire text-blue-600 text-xl"></i>
             <h2 class="text-xl font-bold text-slate-800">สินค้าแนะนำ</h2>
         </div>
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-            <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden hover:shadow-md transition flex flex-col">
-                <div class="h-36 bg-gradient-to-br from-blue-600 to-indigo-700 flex items-center justify-center text-white relative">
-                    <span class="text-lg font-bold">Blox Fruits</span>
-                </div>
-                <div class="p-4 flex-grow flex flex-col justify-between space-y-4">
-                    <h3 class="font-bold text-sm text-slate-800">ไก่ตัน Max Level + หมัดพระเจ้า</h3>
-                    <div class="flex items-center justify-between">
-                        <span class="text-lg font-bold text-blue-600">฿59.00</span>
-                        <button onclick="buyProduct('ไก่ตัน Blox Fruits', 59)" class="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1.5 rounded-md text-xs font-medium transition cursor-pointer">ซื้อสินค้า</button>
-                    </div>
-                </div>
-            </div>
+        <div id="product-list-box" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+            <!-- ดึงรายการสินค้าแบบ Dynamic จากฐานข้อมูลมาใส่ตรงนี้ -->
         </div>
     </div>
 
@@ -108,9 +101,7 @@
                 <i class="fa-solid fa-wallet text-blue-600 text-xl"></i>
                 <h2 class="text-xl font-bold text-slate-800">ระบบเติมเงินอัตโนมัติ</h2>
             </div>
-
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <!-- ช่องทางที่ 1: ซองของขวัญ Wallet -->
                 <div class="border border-slate-100 rounded-xl p-5 bg-slate-50/50">
                     <div class="flex items-center space-x-2 text-pink-500 font-bold mb-3">
                         <i class="fa-solid fa-envelope-open-text text-lg"></i>
@@ -118,10 +109,8 @@
                     </div>
                     <p class="text-xs text-slate-500 mb-4">สร้างซองของขวัญแบบ "แบ่งเท่ากัน" แล้วนำลิงก์มาวางด้านล่าง</p>
                     <input type="text" id="wallet-link" class="w-full p-2.5 bg-white border border-slate-200 rounded-lg text-sm focus:outline-none focus:border-blue-500 mb-3" placeholder="https://gift.truemoney.com/...">
-                    <button onclick="submitTopup('wallet')" class="w-full bg-pink-500 hover:bg-pink-600 text-white font-bold p-2.5 rounded-lg text-xs transition cursor-pointer">ตรวจสอบซองของขวัญ</button>
+                    <button onclick="submitTopup()" class="w-full bg-pink-500 hover:bg-pink-600 text-white font-bold p-2.5 rounded-lg text-sm transition cursor-pointer">ตรวจสอบซองของขวัญ</button>
                 </div>
-
-                <!-- ช่องทางที่ 2: PromptPay -->
                 <div class="border border-slate-100 rounded-xl p-5 bg-slate-50/50 flex flex-col items-center justify-center text-center">
                     <div class="flex items-center space-x-2 text-blue-900 font-bold mb-2">
                         <i class="fa-solid fa-qrcode text-lg"></i>
@@ -137,47 +126,23 @@
     <!-- ================= PAGE 3: HISTORY ================= -->
     <div id="page-history" class="page-content hidden max-w-5xl mx-auto w-full px-4 sm:px-6 lg:px-8 mt-6 flex-grow">
         <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-200 space-y-8 mb-8">
-            <!-- ตารางประวัติการซื้อสินค้า -->
             <div>
                 <div class="flex items-center space-x-2 border-b border-slate-100 pb-2 mb-4">
-                    <i class="fa-solid fa-basket-shopping text-blue-600"></i>
-                    <h3 class="font-bold text-slate-800">ประวัติการซื้อสินค้า</h3>
+                    <i class="fa-solid fa-history text-blue-600"></i>
+                    <h3 class="font-bold text-slate-800">ประวัติการทำรายการย้อนหลังทั้งหมด</h3>
                 </div>
                 <div class="overflow-x-auto">
                     <table class="w-full text-left text-sm">
                         <thead class="bg-slate-50 text-slate-600 font-medium">
                             <tr>
-                                <th class="p-3 rounded-l-lg">สินค้า</th>
-                                <th class="p-3">ราคา</th>
-                                <th class="p-3">ข้อมูลไอดีที่ได้รับ (ID:PASS)</th>
-                                <th class="p-3 rounded-r-lg">วันที่ซื้อ</th>
+                                <th class="p-3 rounded-l-lg">ประเภท</th>
+                                <th class="p-3">รายละเอียดการทำรายการ / คีย์ข้อมูลที่ได้รับ</th>
+                                <th class="p-3">จำนวน</th>
+                                <th class="p-3 rounded-r-lg">วันเวลา</th>
                             </tr>
                         </thead>
-                        <tbody id="history-purchase-box" class="text-slate-700 divide-y divide-slate-100">
-                            <tr><td colspan="4" class="p-4 text-center text-slate-400 text-xs">ไม่มีประวัติการซื้อสินค้า</td></tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-
-            <!-- ตารางประวัติการเติมเงิน -->
-            <div>
-                <div class="flex items-center space-x-2 border-b border-slate-100 pb-2 mb-4">
-                    <i class="fa-solid fa-money-bill-wave text-emerald-600"></i>
-                    <h3 class="font-bold text-slate-800">ประวัติการเติมเงิน</h3>
-                </div>
-                <div class="overflow-x-auto">
-                    <table class="w-full text-left text-sm">
-                        <thead class="bg-slate-50 text-slate-600 font-medium">
-                            <tr>
-                                <th class="p-3 rounded-l-lg">ช่องทาง</th>
-                                <th class="p-3">จำนวนเงิน</th>
-                                <th class="p-3">สถานะ</th>
-                                <th class="p-3 rounded-r-lg">วันที่เติม</th>
-                            </tr>
-                        </thead>
-                        <tbody id="history-topup-box" class="text-slate-700 divide-y divide-slate-100">
-                            <tr><td colspan="4" class="p-4 text-center text-slate-400 text-xs">ไม่มีประวัติการเติมเงิน</td></tr>
+                        <tbody id="history-box" class="text-slate-700 divide-y divide-slate-100">
+                            <tr><td colspan="4" class="p-4 text-center text-slate-400 text-xs">กรุณาเข้าสู่ระบบก่อนเช็กประวัติครับ</td></tr>
                         </tbody>
                     </table>
                 </div>
@@ -185,12 +150,11 @@
         </div>
     </div>
 
-    <!-- ส่วนท้ายเว็บ -->
     <footer class="bg-slate-900 text-slate-400 py-6 text-center text-sm mt-auto">
         <p>© 2026 TESTHUB-SHOP. All Rights Reserved.</p>
     </footer>
 
-    <!-- POPUP MODAL (LOGIN / REGISTER) -->
+    <!-- POPUP MODAL -->
     <div id="auth-modal" class="hidden fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4">
         <div class="bg-white rounded-2xl shadow-xl w-full max-w-md overflow-hidden border border-slate-100">
             <div class="bg-blue-600 text-white p-4 flex justify-between items-center">
@@ -200,65 +164,114 @@
             <form onsubmit="handleSubmit(event)" class="p-6 space-y-4">
                 <div>
                     <label class="block text-sm font-medium text-slate-700 mb-1">Username</label>
-                    <input type="text" id="username" required class="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-lg text-sm focus:outline-none focus:border-blue-500" placeholder="admin หรือ ชื่ออะไรก็ได้">
+                    <input type="text" id="username" required class="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-lg text-sm focus:outline-none focus:border-blue-500" placeholder="ชื่อผู้ใช้งาน">
                 </div>
                 <div>
                     <label class="block text-sm font-medium text-slate-700 mb-1">Password</label>
-                    <input type="password" id="password" required class="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-lg text-sm focus:outline-none focus:border-blue-500" placeholder="1234 หรือ รหัสอะไรก็ได้">
+                    <input type="password" id="password" required class="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-lg text-sm focus:outline-none focus:border-blue-500" placeholder="รหัสผ่าน">
+                </div>
+                <div id="confirm-password-box" class="hidden">
+                    <label class="block text-sm font-medium text-slate-700 mb-1">Confirm Password</label>
+                    <input type="password" id="confirm-password" class="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-lg text-sm focus:outline-none focus:border-blue-500" placeholder="กรอกรหัสผ่านยืนยันอีกครั้ง">
                 </div>
                 <button type="submit" id="submit-btn" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold p-2.5 rounded-lg text-sm transition cursor-pointer">เข้าสู่ระบบ</button>
-                <div class="text-center text-xs text-slate-500 pt-2"><button type="button" onclick="toggleForm()" id="switch-btn" class="text-blue-600 font-bold hover:underline cursor-pointer">สมัครสมาชิกที่นี่</button></div>
+                <div class="text-center text-xs text-slate-500 pt-2">
+                    <button type="button" onclick="toggleForm()" id="switch-btn" class="text-blue-600 font-bold hover:underline cursor-pointer">สมัครสมาชิกที่นี่</button>
+                </div>
             </form>
         </div>
     </div>
 
-    <!-- ================= JAVASCRIPT SYSTEM ================= -->
+    <!-- SYSTEM JAVASCRIPT SYSTEM REAL API -->
     <script>
         let isLoginMode = true;
         let currentUser = null;
 
-        function switchPage(pageId) {
-            document.querySelectorAll('.page-content').forEach(p => p.classList.add('hidden'));
-            document.getElementById(`page-${pageId}`).classList.remove('hidden');
-            
-            // เปลี่ยนสีปุ่มเมนูไฮไลท์
-            ['home', 'topup', 'history'].forEach(id => {
-                const btn = document.getElementById(`nav-${id}`);
-                if(id === pageId) btn.classList.add('bg-blue-700');
-                else btn.classList.remove('bg-blue-700');
-            });
-        }
+        window.onload = function() { loadProducts(); };
 
+        function toggleMobileMenu() { document.getElementById('mobile-menu').classList.toggle('hidden'); }
         function openModal() { document.getElementById('auth-modal').classList.remove('hidden'); }
         function closeModal() { document.getElementById('auth-modal').classList.add('hidden'); }
         
-        function toggleForm() {
-            isLoginMode = !isLoginMode;
-            document.getElementById('modal-title').innerText = isLoginMode ? 'เข้าสู่ระบบสมาชิก' : 'สมัครสมาชิกใหม่';
-            document.getElementById('submit-btn').innerText = isLoginMode ? 'เข้าสู่ระบบ' : 'สร้างบัญชีผู้ใช้';
-            document.getElementById('switch-btn').innerText = isLoginMode ? 'สมัครสมาชิกที่นี่' : 'เข้าสู่ระบบที่นี่';
+        function switchPage(pageId) {
+            document.querySelectorAll('.page-content').forEach(p => p.classList.add('hidden'));
+            document.getElementById(`page-${pageId}`).classList.remove('hidden');
+            if(pageId === 'history') loadHistory();
         }
 
-        function handleSubmit(event) {
-            event.preventDefault();
-            const user = document.getElementById('username').value;
-            const pass = document.getElementById('password').value;
-
-            if(!isLoginMode) { alert('สมัครสมาชิกสำเร็จ! ลองนำชื่อไปล็อกอินดูครับ'); toggleForm(); return; }
-
-            if(user === 'admin' && pass === '1234') {
-                currentUser = { name: '👑 Admin Hub', points: 99999, role: 'admin' };
-                document.getElementById('admin-panel').classList.remove('hidden');
+        function toggleForm() {
+            isLoginMode = !isLoginMode;
+            const confirmBox = document.getElementById('confirm-password-box');
+            if (!isLoginMode) {
+                document.getElementById('modal-title').innerHTML = '<i class="fa-solid fa-user-plus mr-2"></i>สมัครสมาชิกใหม่';
+                document.getElementById('submit-btn').innerText = 'สร้างบัญชีผู้ใช้';
+                document.getElementById('switch-btn').innerText = 'เข้าสู่ระบบที่นี่';
+                confirmBox.classList.remove('hidden');
             } else {
-                currentUser = { name: `👤 ${user}`, points: 0, role: 'user' };
-                document.getElementById('admin-panel').classList.add('hidden');
+                document.getElementById('modal-title').innerHTML = '<i class="fa-solid fa-lock mr-2"></i>เข้าสู่ระบบสมาชิก';
+                document.getElementById('submit-btn').innerText = 'เข้าสู่ระบบ';
+                document.getElementById('switch-btn').innerText = 'สมัครสมาชิกที่นี่';
+                confirmBox.classList.add('hidden');
             }
+        }
 
+        // ดึงข้อมูลสินค้าจากหลังบ้านมาจัดแสดง
+        async function loadProducts() {
+            const res = await fetch('/api/marketplace/products');
+            const data = await res.json();
+            let html = '';
+            data.forEach(p => {
+                html += `
+                <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden hover:shadow-md transition flex flex-col">
+                    <div class="h-36 bg-gradient-to-br from-blue-600 to-indigo-700 flex flex-col items-center justify-center text-white relative">
+                        <span class="text-lg font-bold">${p.category}</span>
+                        <span class="text-xs bg-blue-800 px-2 py-0.5 rounded mt-1">คงเหลือ ${p.stock_count} ชิ้น</span>
+                    </div>
+                    <div class="p-4 flex-grow flex flex-col justify-between space-y-4">
+                        <h3 class="font-bold text-sm text-slate-800">${p.name}</h3>
+                        <div class="flex items-center justify-between">
+                            <span class="text-lg font-bold text-blue-600">฿${p.price}</span>
+                            <button onclick="buyProduct(${p.id})" class="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1.5 rounded-md text-xs font-medium transition cursor-pointer">ซื้อสินค้า</button>
+                        </div>
+                    </div>
+                </div>`;
+            });
+            document.getElementById('product-list-box').innerHTML = html;
+        }
+
+        // สมัครสมาชิก & เข้าสู่ระบบจริงผ่าน API
+        async function handleSubmit(event) {
+            event.preventDefault();
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            const confirmPassword = document.getElementById('confirm-password').value;
+
+            const url = isLoginMode ? '/api/auth/login' : '/api/auth/register';
+            const body = isLoginMode ? { username, password } : { username, password, confirmPassword };
+
+            const res = await fetch(url, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(body)
+            });
+            const data = await res.json();
+
+            if(!res.ok) { alert(data.message); return; }
+
+            alert(data.message);
+            if(!isLoginMode) { toggleForm(); return; }
+
+            currentUser = data.user;
+            updateUserUI();
+            closeModal();
+        }
+
+        function updateUserUI() {
             document.getElementById('login-btn').classList.add('hidden');
             document.getElementById('user-status').classList.remove('hidden');
-            document.getElementById('user-display-name').innerText = currentUser.name;
+            document.getElementById('user-display-name').innerText = currentUser.username;
             document.getElementById('user-points').innerText = currentUser.points;
-            closeModal();
+            if(currentUser.role === 'admin') document.getElementById('admin-panel').classList.remove('hidden');
         }
 
         function logout() {
@@ -269,35 +282,73 @@
             switchPage('home');
         }
 
-        function submitTopup(type) {
-            if(!currentUser) { alert('กรุณาเข้าสู่ระบบก่อนเติมเงินครับ'); return; }
-            const link = document.getElementById('wallet-link').value;
-            if(!link) { alert('กรุณากรอกลิงก์ซองของขวัญ'); return; }
+        // ระบบสั่งซื้อตัดสต็อกจริง
+        async function buyProduct(productId) {
+            if(!currentUser) { alert('กรุณาเข้าสู่ระบบก่อนซื้อสินค้าครับ'); openModal(); return; }
             
-            // จำลองการเติมเงินหน้าบ้าน
-            currentUser.points += 50;
-            document.getElementById('user-points').innerText = currentUser.points;
+            const res = await fetch('/api/marketplace/buy', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ userId: currentUser.id, productId })
+            });
+            const data = await res.json();
+
+            if(!res.ok) { alert(data.message); return; }
+
+            // เปิดหน้าต่างแจ้งรับไอดี
+            alert(`🎉 ซื้อสำเร็จ!\nไอดีของคุณคือ: \n\n${data.account_data}\n\n(คุณสามารถดูซ้ำได้ที่หน้าเมนูประวัติการใช้งาน)`);
             
-            // เพิ่มลงตารางประวัติการเติมเงิน
-            const row = `<tr><td class="p-3 text-pink-500 font-bold">TrueMoney Wallet</td><td class="p-3 text-emerald-600 font-bold">+฿50.00</td><td class="p-3"><span class="bg-emerald-100 text-emerald-700 text-xs px-2 py-0.5 rounded-full font-bold">สำเร็จ</span></td><td class="p-3 text-xs text-slate-500">${new Date().toLocaleDateString('th-TH')}</td></tr>`;
-            document.getElementById('history-topup-box').innerHTML = row;
-            
-            alert('เติมเงินสำเร็จ! ได้รับ 50 พ้อยท์ (ระบบจำลอง)');
-            document.getElementById('wallet-link').value = '';
+            // อัปเดตพ้อยท์หน้าจอใหม่
+            currentUser.points = (parseFloat(currentUser.points) - parseFloat(data.pointsAdded || 0)).toFixed(2); 
+            location.reload(); // รีโหลดเพื่ออัปเดตสต็อกสดใหม่
         }
 
-        function buyProduct(pName, price) {
-            if(!currentUser) { alert('กรุณาเข้าสู่ระบบก่อนซื้อสินค้าครับ'); return; }
-            if(currentUser.points < price) { alert('พ้อยท์ของคุณไม่เพียงพอ กรุณาเติมเงินก่อนครับ'); return; }
+        // ระบบยิงเคลมซองของขวัญเข้ากระเป๋าจริง
+        async function submitTopup() {
+            if(!currentUser) { alert('กรุณาเข้าสู่ระบบก่อนทำการเติมเงินครับ'); return; }
+            const voucherLink = document.getElementById('wallet-link').value;
+            if(!voucherLink) { alert('กรุณาวางลิงก์ซองของขวัญก่อนกดตรวจครับ'); return; }
 
-            currentUser.points -= price;
-            document.getElementById('user-points').innerText = currentUser.points;
+            const res = await fetch('/api/payment/topup', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ userId: currentUser.id, voucherLink })
+            });
+            const data = await res.json();
 
-            // เพิ่มลงตารางประวัติการซื้อสินค้า
-            const row = `<tr><td class="p-3 font-bold">${pName}</td><td class="p-3 text-blue-600 font-bold">฿${price}.00</td><td class="p-3 font-mono text-xs text-slate-600 bg-slate-50 p-2 rounded border border-slate-100 block mt-1">ID: testhub_chicken / PASS: th123456</td><td class="p-3 text-xs text-slate-500">${new Date().toLocaleDateString('th-TH')}</td></tr>`;
-            document.getElementById('history-purchase-box').innerHTML = row;
+            if(!res.ok) { alert(data.message); return; }
 
-            alert(`ซื้อสินค้าสำเร็จ!\nคุณสามารถดู ID:PASS ได้ที่หน้า "ประวัติการใช้งาน" ครับ`);
+            alert(data.message);
+            document.getElementById('wallet-link').value = '';
+            location.reload();
+        }
+
+        // โหลดข้อมูลประวัติจริงจากหลังบ้าน
+        async function loadHistory() {
+            if(!currentUser) return;
+            const res = await fetch(`/api/user/history/${currentUser.id}`);
+            const data = await res.json();
+            let html = '';
+            
+            if(data.length === 0) {
+                document.getElementById('history-box').innerHTML = `<tr><td colspan="4" class="p-4 text-center text-slate-400 text-xs">ยังไม่มีประวัติการทำรายการในบัญชีนี้</td></tr>`;
+                return;
+            }
+
+            data.forEach(h => {
+                const badge = h.type === 'topup' ? '<span class="bg-emerald-100 text-emerald-700 px-2 py-0.5 rounded text-xs">เติมเงิน</span>' : '<span class="bg-blue-100 text-blue-700 px-2 py-0.5 rounded text-xs">ซื้อสินค้า</span>';
+                const amountColor = h.type === 'topup' ? 'text-emerald-600 font-bold' : 'text-red-500 font-bold';
+                const prefix = h.type === 'topup' ? '+' : '-';
+                
+                html += `
+                <tr>
+                    <td class="p-3">${badge}</td>
+                    <td class="p-3 font-medium text-slate-800">${h.description}</td>
+                    <td class="p-3 ${amountColor}">${prefix}฿${h.amount}</td>
+                    <td class="p-3 text-xs text-slate-400">${h.date}</td>
+                </tr>`;
+            });
+            document.getElementById('history-box').innerHTML = html;
         }
     </script>
 </body>
