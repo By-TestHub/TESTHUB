@@ -3,10 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TESTHUB-SHOP</title>
-    <!-- นำเข้า Tailwind CSS ผ่าน CDN -->
+    <title>TESTHUB-SHOP - ร้านขายไอดีไก่ตันอัตโนมัติ</title>
+    <!-- นำเข้า Tailwind CSS -->
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
-    <!-- นำเข้า Font Awesome สำหรับไอคอนต่างๆ -->
+    <!-- นำเข้า Font Awesome ไอคอน -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700&display=swap');
@@ -19,152 +19,231 @@
     <nav class="bg-blue-600 text-white shadow-md sticky top-0 z-50">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex items-center justify-between h-16">
-                <!-- โลโก้ร้าน -->
                 <div class="flex-shrink-0 flex items-center space-x-2">
-                    <i class="fa-solid fa-gamepad text-2xl text-cyan-300"></i>
-                    <span class="font-bold text-xl tracking-wider">GG HUB</span>
+                    <i class="fa-solid fa-shield-halved text-2xl text-cyan-300"></i>
+                    <span class="font-bold text-xl tracking-wider">TESTHUB-SHOP</span>
                 </div>
                 
-                <!-- เมนูหลัก -->
                 <div class="hidden md:flex space-x-4 items-center">
                     <a href="#" class="px-3 py-2 rounded-md text-sm font-medium bg-blue-700"><i class="fa-solid fa-house mr-1"></i> หน้าหลัก</a>
                     <a href="#" class="px-3 py-2 rounded-md text-sm font-medium hover:bg-blue-500 transition"><i class="fa-solid fa-wallet mr-1"></i> เติมเงิน</a>
-                    <a href="#" class="px-3 py-2 rounded-md text-sm font-medium hover:bg-blue-500 transition"><i class="fa-solid fa-ticket mr-1"></i> กรอกโค้ด</a>
                     <a href="#" class="px-3 py-2 rounded-md text-sm font-medium hover:bg-blue-500 transition"><i class="fa-solid fa-shop mr-1"></i> สินค้าทั้งหมด</a>
-                    <a href="#" class="px-3 py-2 rounded-md text-sm font-medium hover:bg-blue-500 transition"><i class="fa-solid fa-address-card mr-1"></i> ติดต่อเรา</a>
                 </div>
 
-                <!-- ส่วนแสดงพ้อยท์ & โปรไฟล์ -->
+                <!-- ส่วนแสดงสถานะผู้ใช้ -->
                 <div class="flex items-center space-x-4">
-                    <div class="bg-blue-700 px-3 py-1.5 rounded-full text-sm font-medium border border-blue-400">
-                        <i class="fa-solid fa-coins text-amber-400 mr-1"></i> Points: <span class="font-bold">0</span>
+                    <!-- แสดงเมื่อล็อคอินแล้ว -->
+                    <div id="user-status" class="hidden flex items-center space-x-3">
+                        <div class="bg-blue-700 px-3 py-1.5 rounded-full text-sm font-medium border border-blue-400">
+                            <i class="fa-solid fa-coins text-amber-400 mr-1"></i> Points: <span id="user-points" class="font-bold">0</span>
+                        </div>
+                        <span id="user-display-name" class="text-sm font-medium bg-blue-800 px-3 py-1.5 rounded-md"></span>
+                        <button onclick="logout()" class="text-red-200 hover:text-white text-sm font-medium transition cursor-pointer"><i class="fa-solid fa-right-from-bracket"></i> ออกจากระบบ</button>
                     </div>
-                    <!-- ปุ่มเข้าสู่ระบบ (กรณีที่ยังไม่ได้ล็อคอิน) -->
-                    <a href="#" class="bg-cyan-400 hover:bg-cyan-300 text-blue-900 px-4 py-1.5 rounded-md text-sm font-medium font-bold transition shadow-sm">
-                        <i class="fa-solid fa-right-to-bracket mr-1"></i> เข้าสู่ระบบ
-                    </a>
+
+                    <!-- ปุ่มเข้าสู่ระบบ (แสดงตอนยังไม่ได้ล็อคอิน) -->
+                    <button id="login-btn" onclick="openModal()" class="bg-cyan-400 hover:bg-cyan-300 text-blue-900 px-4 py-1.5 rounded-md text-sm font-bold transition shadow-sm cursor-pointer">
+                        <i class="fa-solid fa-right-to-bracket mr-1"></i> เข้าสู่ระบบ / สมัครสมาชิก
+                    </button>
                 </div>
             </div>
         </div>
     </nav>
 
-    <!-- 2. แบนเนอร์สไลด์ (Banner / Hero Section) -->
-    <div class="max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 mt-6">
-        <div class="bg-gradient-to-r from-blue-500 to-cyan-500 rounded-2xl p-8 text-white shadow-lg relative overflow-hidden flex flex-col md:flex-row items-center justify-between min-h-[250px]">
-            <div class="z-10 text-center md:text-left space-y-3">
-                <span class="bg-blue-700/50 text-cyan-200 text-xs px-3 py-1 rounded-full uppercase font-bold tracking-wider">ยินดีต้อนรับสู่ GG HUB</span>
-                <h1 class="text-3xl md:text-4xl font-extrabold">ศูนย์รวมไอดีไก่ตัน ทุกแมพยอดนิยม!</h1>
-                <p class="text-blue-100 max-w-md">ระบบอัตโนมัติ 24 ชม. เติมปุ๊บ ได้รับไอดีทันที ปลอดภัย ไร้ประวัติการโกง</p>
+    <!-- 2. ระบบจัดการหลังบ้านของแอดมิน (จะแสดงเฉพาะเมื่อ Login เป็น Admin) -->
+    <div id="admin-panel" class="hidden max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 mt-6">
+        <div class="bg-white rounded-2xl p-6 shadow-sm border border-amber-200 bg-gradient-to-b from-amber-50/30 to-white">
+            <div class="flex items-center space-x-2 border-b border-amber-200 pb-3 mb-4">
+                <i class="fa-solid fa-sliders text-amber-600 text-xl"></i>
+                <h2 class="text-lg font-bold text-slate-800">ระบบจัดการร้านค้า (แอดมินหลังบ้าน)</h2>
             </div>
-            <!-- ส่วนจำลองขนาดภาพแบนเนอร์เหมือนในตัวอย่าง (1320x400) -->
-            <div class="mt-6 md:mt-0 z-10 w-full md:w-1/3 bg-white/10 backdrop-blur-sm rounded-xl border border-white/20 p-4 text-center">
-                <span class="text-sm font-mono text-cyan-100 block mb-2">BANNER SLOT</span>
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                <button class="p-4 bg-slate-50 hover:bg-blue-50 border border-slate-200 rounded-xl text-center transition group">
+                    <i class="fa-solid fa-chart-line text-2xl text-blue-500 mb-2 block group-hover:scale-110 transition"></i>
+                    <span class="text-sm font-medium text-slate-700">หน้าแดชบอร์ด</span>
+                </button>
+                <button class="p-4 bg-slate-50 hover:bg-blue-50 border border-slate-200 rounded-xl text-center transition group">
+                    <i class="fa-solid fa-boxes-packing text-2xl text-blue-500 mb-2 block group-hover:scale-110 transition"></i>
+                    <span class="text-sm font-medium text-slate-700">จัดการคลังสินค้า (คีย์ไก่ตัน)</span>
+                </button>
+                <button class="p-4 bg-slate-50 hover:bg-blue-50 border border-slate-200 rounded-xl text-center transition group">
+                    <i class="fa-solid fa-users text-2xl text-blue-500 mb-2 block group-hover:scale-110 transition"></i>
+                    <span class="text-sm font-medium text-slate-700">จัดการผู้ใช้</span>
+                </button>
+                <button class="p-4 bg-slate-50 hover:bg-blue-50 border border-slate-200 rounded-xl text-center transition group">
+                    <i class="fa-solid fa-images text-2xl text-blue-500 mb-2 block group-hover:scale-110 transition"></i>
+                    <span class="text-sm font-medium text-slate-700">จัดการภาพสไลด์</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 3. แบนเนอร์สไลด์ -->
+    <div class="max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 mt-6">
+        <div class="bg-gradient-to-r from-blue-500 to-cyan-500 rounded-2xl p-8 text-white shadow-lg flex flex-col md:flex-row items-center justify-between min-h-[220px]">
+            <div class="space-y-3">
+                <span class="bg-blue-700/50 text-cyan-200 text-xs px-3 py-1 rounded-full uppercase font-bold tracking-wider">TESTHUB-SHOP ONLINE</span>
+                <h1 class="text-3xl font-extrabold">ศูนย์รวมไอดีไก่ตัน ทุกแมพยอดนิยม!</h1>
+                <p class="text-blue-100 max-w-md">ระบบเว็บอัตโนมัติ 24 ชม. ปรับปรุงใหม่ในโทนสีฟ้าสดใส</p>
+            </div>
+            <div class="mt-6 md:mt-0 w-full md:w-1/3 bg-white/10 backdrop-blur-sm rounded-xl border border-white/20 p-4 text-center">
+                <span class="text-sm font-mono text-cyan-100 block mb-1">BANNER SLOT</span>
                 <div class="text-2xl font-bold text-white">1320 x 400</div>
             </div>
         </div>
     </div>
 
-    <!-- 3. รายการสินค้าไอดีไก่ตันแยกตามแมพ (Product Section) -->
+    <!-- 4. รายการสินค้า -->
     <main class="max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 flex-grow my-8">
         <div class="flex items-center space-x-2 border-b-2 border-blue-500 pb-2 mb-6">
             <i class="fa-solid fa-fire text-blue-600 text-xl"></i>
             <h2 class="text-xl font-bold text-slate-800">สินค้าแนะนำ / ไก่ตันแมพต่างๆ</h2>
         </div>
 
-        <!-- Grid การ์ดสินค้า -->
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            
-            <!-- การ์ดตัวอย่างที่ 1: Blox Fruits -->
+            <!-- การ์ดสินค้า Blox Fruits -->
             <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden hover:shadow-md transition flex flex-col">
                 <div class="h-40 bg-gradient-to-br from-blue-600 to-indigo-700 flex items-center justify-center text-white relative">
                     <span class="absolute top-2 right-2 bg-emerald-500 text-white text-xs px-2 py-1 rounded font-bold">พร้อมส่ง</span>
-                    <i class="fa-solid fa-ship text-5xl opacity-40"></i>
-                    <span class="absolute text-lg font-bold">Blox Fruits</span>
+                    <span class="text-lg font-bold">Blox Fruits</span>
                 </div>
                 <div class="p-4 flex-grow flex flex-col justify-between space-y-4">
                     <div>
-                        <h3 class="font-bold text-slate-800 line-clamp-1">ไก่ตัน Max Level + 6 หมัด หมัดพระเจ้า</h3>
+                        <h3 class="font-bold text-slate-800 line-clamp-1">ไก่ตัน Max Level + หมัดพระเจ้า</h3>
                         <p class="text-xs text-slate-500 mt-1"><i class="fa-solid fa-boxes-stacked mr-1"></i> คงเหลือ: 15 ชิ้น</p>
                     </div>
                     <div class="flex items-center justify-between pt-2">
                         <span class="text-xl font-bold text-blue-600">฿59.00</span>
-                        <button class="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1.5 rounded-md text-sm font-medium transition">
-                            <i class="fa-solid fa-cart-shopping mr-1"></i> ซื้อสินค้า
-                        </button>
+                        <button onclick="buyProduct('ไก่ตัน Blox Fruits')" class="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1.5 rounded-md text-sm font-medium transition cursor-pointer">ซื้อสินค้า</button>
                     </div>
                 </div>
             </div>
-
-            <!-- การ์ดตัวอย่างที่ 2: King Legacy -->
-            <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden hover:shadow-md transition flex flex-col">
-                <div class="h-40 bg-gradient-to-br from-cyan-600 to-blue-700 flex items-center justify-center text-white relative">
-                    <span class="absolute top-2 right-2 bg-emerald-500 text-white text-xs px-2 py-1 rounded font-bold">พร้อมส่ง</span>
-                    <i class="fa-solid fa-crown text-5xl opacity-40"></i>
-                    <span class="absolute text-lg font-bold">King Legacy</span>
-                </div>
-                <div class="p-4 flex-grow flex flex-col justify-between space-y-4">
-                    <div>
-                        <h3 class="font-bold text-slate-800 line-clamp-1">ไก่ตัน เลเวลตัน สุ่มดาบคู่และผลตื่น</h3>
-                        <p class="text-xs text-slate-500 mt-1"><i class="fa-solid fa-boxes-stacked mr-1"></i> คงเหลือ: 8 ชิ้น</p>
-                    </div>
-                    <div class="flex items-center justify-between pt-2">
-                        <span class="text-xl font-bold text-blue-600">฿49.00</span>
-                        <button class="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1.5 rounded-md text-sm font-medium transition">
-                            <i class="fa-solid fa-cart-shopping mr-1"></i> ซื้อสินค้า
-                        </button>
-                    </div>
-                </div>
-            </div>
-
-            <!-- การ์ดตัวอย่างที่ 3: Anime Adventures -->
-            <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden hover:shadow-md transition flex flex-col">
-                <div class="h-40 bg-gradient-to-br from-blue-700 to-cyan-800 flex items-center justify-center text-white relative">
-                    <span class="absolute top-2 right-2 bg-emerald-500 text-white text-xs px-2 py-1 rounded font-bold">พร้อมส่ง</span>
-                    <i class="fa-solid fa-bolt text-5xl opacity-40"></i>
-                    <span class="absolute text-lg font-bold">Anime Vanguards</span>
-                </div>
-                <div class="p-4 flex-grow flex flex-col justify-between space-y-4">
-                    <div>
-                        <h3 class="font-bold text-slate-800 line-clamp-1">ไอดีเริ่มต้น เพชร 50,000+ สุ่มตัวละครเทพ</h3>
-                        <p class="text-xs text-slate-500 mt-1"><i class="fa-solid fa-boxes-stacked mr-1"></i> คงเหลือ: 23 ชิ้น</p>
-                    </div>
-                    <div class="flex items-center justify-between pt-2">
-                        <span class="text-xl font-bold text-blue-600">฿89.00</span>
-                        <button class="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1.5 rounded-md text-sm font-medium transition">
-                            <i class="fa-solid fa-cart-shopping mr-1"></i> ซื้อสินค้า
-                        </button>
-                    </div>
-                </div>
-            </div>
-
-            <!-- การ์ดตัวอย่างที่ 4: เติม Robux / บริการอื่นๆ -->
-            <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden hover:shadow-md transition flex flex-col">
-                <div class="h-40 bg-gradient-to-br from-slate-700 to-blue-900 flex items-center justify-center text-white relative">
-                    <span class="absolute top-2 right-2 bg-red-500 text-white text-xs px-2 py-1 rounded font-bold">หมด</span>
-                    <i class="fa-solid fa-gem text-5xl opacity-40"></i>
-                    <span class="absolute text-lg font-bold">บริการอื่นๆ</span>
-                </div>
-                <div class="p-4 flex-grow flex flex-col justify-between space-y-4">
-                    <div>
-                        <h3 class="font-bold text-slate-800 line-clamp-1">รับกด Pass & ไอเทมในเกม ราคากันเอง</h3>
-                        <p class="text-xs text-slate-500 mt-1"><i class="fa-solid fa-boxes-stacked mr-1"></i> คงเหลือ: 0 ชิ้น</p>
-                    </div>
-                    <div class="flex items-center justify-between pt-2">
-                        <span class="text-xl font-bold text-blue-600">฿150.00</span>
-                        <button disabled class="bg-slate-300 text-slate-500 px-3 py-1.5 rounded-md text-sm font-medium cursor-not-allowed w-full text-center">
-                            สินค้าหมด
-                        </button>
-                    </div>
-                </div>
-            </div>
-
         </div>
     </main>
 
-    <!-- 4. ส่วนท้ายเว็บ (Footer) -->
-    <footer class="bg-slate-900 text-slate-400 py-6 border-t border-slate-800 text-center text-sm">
-        <p>© 2026 GG HUB. All Rights Reserved. พัฒนาโดยโปรแกรมเมอร์คู่หู AI</p>
+    <!-- 5. ส่วนท้ายเว็บ -->
+    <footer class="bg-slate-900 text-slate-400 py-6 text-center text-sm mt-auto">
+        <p>© 2026 TESTHUB-SHOP. All Rights Reserved.</p>
     </footer>
 
+    <!-- ================= 🔑 POPUP MODAL (LOGIN / REGISTER) ================= -->
+    <div id="auth-modal" class="hidden fixed inset-0 z-50 overflow-y-auto bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl shadow-xl w-full max-w-md overflow-hidden transform transition-all border border-slate-100">
+            <!-- หัวข้อหน้าต่าง -->
+            <div class="bg-blue-600 text-white p-4 flex justify-between items-center">
+                <h3 id="modal-title" class="text-lg font-bold"><i class="fa-solid fa-lock mr-2"></i>เข้าสู่ระบบสมาชิก</h3>
+                <button onclick="closeModal()" class="text-white/80 hover:text-white text-xl cursor-pointer">&times;</button>
+            </div>
+
+            <!-- ฟอร์มกรอกข้อมูล -->
+            <form id="auth-form" onsubmit="handleSubmit(event)" class="p-6 space-y-4">
+                <div>
+                    <label class="block text-sm font-medium text-slate-700 mb-1">ชื่อผู้ใช้งาน (Username)</label>
+                    <div class="relative">
+                        <i class="fa-solid fa-user absolute left-3 top-3.5 text-slate-400 text-sm"></i>
+                        <input type="text" id="username" required class="pl-9 w-full p-2.5 bg-slate-50 border border-slate-200 rounded-lg text-sm focus:outline-none focus:border-blue-500" placeholder="กรอกชื่อผู้ใช้">
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-sm font-medium text-slate-700 mb-1">รหัสผ่าน (Password)</label>
+                    <div class="relative">
+                        <i class="fa-solid fa-key absolute left-3 top-3.5 text-slate-400 text-sm"></i>
+                        <input type="password" id="password" required class="pl-9 w-full p-2.5 bg-slate-50 border border-slate-200 rounded-lg text-sm focus:outline-none focus:border-blue-500" placeholder="กรอกรหัสผ่าน">
+                    </div>
+                </div>
+
+                <!-- ปุ่มกดยืนยัน -->
+                <button type="submit" id="submit-btn" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold p-2.5 rounded-lg text-sm transition shadow-sm cursor-pointer mt-2">
+                    เข้าสู่ระบบ
+                </button>
+
+                <!-- ตัวสลับระหว่าง ล็อคอิน / สมัครสมาชิก -->
+                <div class="text-center text-xs text-slate-500 pt-2 border-t border-slate-100">
+                    <span id="switch-text">ยังไม่มีบัญชีผู้ใช้?</span>
+                    <button type="button" onclick="toggleForm()" id="switch-btn" class="text-blue-600 font-bold ml-1 hover:underline cursor-pointer">สมัครสมาชิกที่นี่</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- ================= 💻 JAVASCRIPT SYSTEM ================= -->
+    <script>
+        let isLoginMode = true;
+
+        function openModal() {
+            document.getElementById('auth-modal').classList.remove('hidden');
+        }
+
+        function closeModal() {
+            document.getElementById('auth-modal').classList.add('hidden');
+            document.getElementById('auth-form').reset();
+        }
+
+        function toggleForm() {
+            isLoginMode = !isLoginMode;
+            const modalTitle = document.getElementById('modal-title');
+            const submitBtn = document.getElementById('submit-btn');
+            const switchText = document.getElementById('switch-text');
+            const switchBtn = document.getElementById('switch-btn');
+
+            if (isLoginMode) {
+                modalTitle.innerHTML = '<i class="fa-solid fa-lock mr-2"></i>เข้าสู่ระบบสมาชิก';
+                submitBtn.innerText = 'เข้าสู่ระบบ';
+                switchText.innerText = 'ยังไม่มีบัญชีผู้ใช้?';
+                switchBtn.innerText = 'สมัครสมาชิกที่นี่';
+            } else {
+                modalTitle.innerHTML = '<i class="fa-solid fa-user-plus mr-2"></i>สมัครสมาชิกใหม่';
+                submitBtn.innerText = 'สร้างบัญชีผู้ใช้';
+                switchText.innerText = 'มีบัญชีอยู่แล้วใช่ไหม?';
+                switchBtn.innerText = 'เข้าสู่ระบบที่นี่';
+            }
+        }
+
+        // ระบบตรวจจับการกดปุ่ม Submit ล็อคอิน
+        function handleSubmit(event) {
+            event.preventDefault();
+            const userInp = document.getElementById('username').value;
+            const passInp = document.getElementById('password').value;
+
+            if (!isLoginMode) {
+                alert('สมัครสมาชิกสำเร็จ! (ระบบจำลองหน้าบ้านเรียบร้อย ลองใช้ชื่อนี้ไปล็อคอินได้เลย)');
+                toggleForm();
+                return;
+            }
+
+            // --- 🔑 บัญชีทดสอบระบบแยกสถานะ ---
+            if (userInp === 'admin' && passInp === '1234') {
+                // เคสแอดมิน
+                alert('ยินดีต้อนรับท่านแอดมินเข้าสู่ระบบ!');
+                document.getElementById('admin-panel').classList.remove('hidden'); // เปิดแผงแอดมิน
+                updateNavbarLoggedIn('👑 Admin Hub', 99999);
+            } else {
+                // เคสผู้ใช้ปกติทั่วไป
+                alert(`เข้าสู่ระบบสำเร็จ! ยินดีต้อนรับคุณ ${userInp}`);
+                document.getElementById('admin-panel').classList.add('hidden'); // ซ่อนแผงแอดมิน
+                updateNavbarLoggedIn(`👤 ${userInp}`, 0);
+            }
+            closeModal();
+        }
+
+        function updateNavbarLoggedIn(name, points) {
+            document.getElementById('login-btn').classList.add('hidden');
+            document.getElementById('user-status').classList.remove('hidden');
+            document.getElementById('user-display-name').innerText = name;
+            document.getElementById('user-points').innerText = points;
+        }
+
+        function logout() {
+            alert('ออกจากระบบเรียบร้อยแล้ว');
+            document.getElementById('login-btn').classList.remove('hidden');
+            document.getElementById('user-status').classList.add('hidden');
+            document.getElementById('admin-panel').classList.add('hidden');
+        }
+
+        function buyProduct(pName) {
+            alert(`คุณกำลังจะซื้อ: ${pName}\nกรุณาเข้าสู่ระบบและเช็คยอดพ้อยท์ก่อนทำรายการครับ`);
+        }
+    </script>
 </body>
 </html>
