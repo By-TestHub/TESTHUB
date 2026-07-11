@@ -1,175 +1,155 @@
 const express = require('express');
-const mysql = require('mysql2/promise');
-const fetch = require('axios');
-const tls = require("tls");
+const mysql = require('mysql2');
+const axios = require('axios');
 const path = require('path');
-
-tls.DEFAULT_MIN_VERSION = "TLSv1.3";
-
 const app = express();
+const PORT = process.env.PORT || 3000;
+
 app.use(express.json());
-app.use(express.static(__dirname)); // ส่งไฟล์หน้าบ้านออกไปแสดงผล
+app.use(express.static(path.join(__dirname))); // ให้เข้าถึงไฟล์ index.html ได้
 
-const OWNER_PHONE = "0947643009"; // เปลี่ยนเป็นเบอร์ Wallet ของคุณที่ต้องการรับเงิน
-
-const pool = mysql.createPool({
-    host: 'localhost',
-    user: 'root',
-    password: '', // ใส่รหัสผ่าน MySQL ของคุณ
-    database: 'testhub_shop',
+// 1. เชื่อมต่อฐานข้อมูล MySQL (ดึงค่าจาก Environment Variables บน Render)
+const db = mysql.createPool({
+    host: process.env.DB_HOST || 'localhost',
+    user: process.env.DB_USER || 'root',
+    password: process.env.DB_PASSWORD || '',
+    database: process.env.DB_NAME || 'testhub_shop',
     waitForConnections: true,
-    connectionLimit: 10
+    connectionLimit: 10,
+    queueLimit: 0
 });
 
-// ฟังก์ชันดึงเงินจากซอง TrueMoney Wallet
-async function redeemVouchers(phone_number, voucher_code) {
-    voucher_code = voucher_code.replace('https://gift.truemoney.com/campaign/?v=', '');
-    if (!/^[a-z0-9]*$/i.test(voucher_code) || voucher_code.length <= 0) {
-        return { status: 'FAIL', reason: 'รูปแบบลิงก์ซองของขวัญไม่ถูกต้อง' };
-    }
-    
-    const data = { mobile: `${phone_number}`, voucher_hash: `${voucher_code}` };
-    try {
-        const response = await fetch(`https://gift.truemoney.com/campaign/vouchers/${voucher_code}/redeem`, {
-            method: 'post',
-            data: JSON.stringify(data),
-            headers: { 'Content-Type': 'application/json' },
-        });
-        const resjson = response.data ? response.data : response.response.data;
-        
-        if (resjson.status.code == 'SUCCESS') {
-            return {
-                status: 'SUCCESS',
-                amount: parseInt(resjson.data.voucher.redeemed_amount_baht)
-            };
-        } else {
-            return { status: 'FAIL', reason: resjson.status.message };
-        }
-    } catch (err) {
-        return { status: 'FAIL', reason: 'ติดต่อเซิร์ฟเวอร์ TrueMoney ไม่ได้' };
-    }
-}
+// สร้างตารางอัตโนมัติถ้ายังไม่มีในระบบ
+db.query(`
+    CREATE TABLE IF NOT EXISTS users (
+        id INT AUTO_INCREMENT PRIMARY KEY,
+        username VARCHAR(50) UNIQUE NOT NULL,
+        password VARCHAR(255) NOT NULL,
+        points DECIMAL(10,2) DEFAULT 0.00,
+        role VARCHAR(20) DEFAULT 'user'
+    )
+`, (err) => { if (err) console.error("สร้างตาราง users ล้มเหลว:", err); });
 
-// หน้าแรกเปิดเว็บ
-app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, 'index.html'));
-});
+db.query(`
+    CREATE TABLE IF NOT EXISTS products (
+        id INT AUTO_INCREMENT PRIMARY KEY,
+        name VARCHAR(100) NOT NULL,
+        category VARCHAR(50) NOT NULL,
+        price DECIMAL(10,2) NOT NULL,
+        stock_count INT DEFAULT 0,
+        account_data TEXT
+    )
+`);
 
-// API 1: สมัครสมาชิก
-app.post('/api/auth/register', async (req, res) => {
+db.query(`
+    CREATE TABLE IF NOT EXISTS history (
+        id INT AUTO_INCREMENT PRIMARY KEY,
+        user_id INT,
+        type VARCHAR(20),
+        description VARCHAR(255),
+        amount DECIMAL(10,2),
+        date TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    )
+`);
+
+// ================= API ROUTES =================
+
+// 2. ระบบสมัครสมาชิก
+app.post('/api/auth/register', (req, res) => {
     const { username, password, confirmPassword } = req.body;
-    if (!username || !password || !confirmPassword) return res.status(400).json({ message: 'กรุณากรอกข้อมูลให้ครบ' });
-    if (password !== confirmPassword) return res.status(400).json({ message: 'รหัสผ่านยืนยันไม่ตรงกัน' });
+    if (!username || !password) return res.status(400).json({ message: 'กรุณากรอกข้อมูลให้ครบถ้วน' });
+    if (password !== confirmPassword) return res.status(400).json({ message: 'รหัสผ่านไม่ตรงกัน' });
 
-    try {
-        const [rows] = await pool.query('SELECT id FROM users WHERE username = ?', [username]);
-        if (rows.length > 0) return res.status(400).json({ message: 'มีชื่อผู้ใช้งานนี้ในระบบแล้ว' });
+    // ตรวจสอบว่ามีชื่อผู้ใช้นี้หรือยัง
+    db.query('SELECT * FROM users WHERE username = ?', [username], (err, results) => {
+        if (results.length > 0) return res.status(400).json({ message: 'ชื่อผู้ใช้งานนี้ถูกใช้ไปแล้ว' });
 
-        await pool.query('INSERT INTO users (username, password, points) VALUES (?, ?, 0)', [username, password]);
-        return res.json({ message: 'สมัครสมาชิกสำเร็จ!' });
-    } catch (err) {
-        return res.status(500).json({ message: 'เกิดข้อผิดพลาดหลังบ้าน' });
-    }
+        // เพื่อความง่ายในการเริ่มต้นจะเก็บแบบข้อความธรรมดา (ในอนาคตแนะนำให้ใช้ bcrypt แฮชรหัสผ่าน)
+        // บัญชีแรกที่สมัครจะตั้งให้เป็นแอดมินอัตโนมัติเพื่อทดสอบระบบ
+        db.query('SELECT COUNT(*) as count FROM users', (err, row) => {
+            const role = row[0].count === 0 ? 'admin' : 'user';
+
+            db.query('INSERT INTO users (username, password, role) VALUES (?, ?, ?)', [username, password, role], (err, result) => {
+                if (err) return res.status(500).json({ message: 'เกิดข้อผิดพลาดในการบันทึกข้อมูล' });
+                res.json({ message: `สมัครสมาชิกสำเร็จ! บัญชีของคุณมีสถานะเป็น: ${role}` });
+            });
+        });
+    });
 });
 
-// API 2: เข้าสู่ระบบ
-app.post('/api/auth/login', async (req, res) => {
+// 3. ระบบเข้าสู่ระบบ
+app.post('/api/auth/login', (req, res) => {
     const { username, password } = req.body;
-    try {
-        const [rows] = await pool.query('SELECT id, username, points, role FROM users WHERE username = ? AND password = ?', [username, password]);
-        if (rows.length === 0) return res.status(400).json({ message: 'ชื่อผู้ใช้งาน หรือรหัสผ่านไม่ถูกต้อง' });
-        return res.json({ message: 'เข้าสู่ระบบสำเร็จ', user: rows[0] });
-    } catch (err) {
-        return res.status(500).json({ message: 'เกิดข้อผิดพลาดหลังบ้าน' });
-    }
+    db.query('SELECT id, username, points, role FROM users WHERE username = ? AND password = ?', [username, password], (err, results) => {
+        if (err || results.length === 0) return res.status(401).json({ message: 'ชื่อผู้ใช้งานหรือรหัสผ่านไม่ถูกต้อง' });
+        
+        res.json({ 
+            message: 'เข้าสู่ระบบสำเร็จ!', 
+            user: results[0] 
+        });
+    });
 });
 
-// API 3: ดึงรายการสินค้าหน้าร้าน
-app.get('/api/marketplace/products', async (req, res) => {
-    try {
-        const [products] = await pool.query('SELECT p.*, COUNT(s.id) as stock_count FROM products p LEFT JOIN stocks s ON p.id = s.product_id AND s.status = "available" GROUP BY p.id');
-        return res.json(products);
-    } catch (err) {
-        return res.status(500).json({ message: 'โหลดข้อมูลล้มเหลว' });
-    }
+// 4. ดึงรายการสินค้าทั้งหมด
+app.get('/api/marketplace/products', (req, res) => {
+    db.query('SELECT id, name, category, price, stock_count FROM products WHERE stock_count > 0', (err, results) => {
+        if (err) return res.status(500).json({ message: 'ไม่สามารถดึงข้อมูลสินค้าได้' });
+        res.json(results);
+    });
 });
 
-// API 4: ระบบซื้อสินค้าสกัดการซื้อซ้อน (Transaction)
-app.post('/api/marketplace/buy', async (req, res) => {
-    const { userId, productId } = req.body;
-    const connection = await pool.getConnection();
-
-    try {
-        await connection.beginTransaction();
-
-        // 1. ตรวจแต้มผู้ใช้ + ล็อกแถว
-        const [userRows] = await connection.query('SELECT points FROM users WHERE id = ? FOR UPDATE', [userId]);
-        if (userRows.length === 0) throw new Error('ไม่พบผู้ใช้');
-
-        // 2. ตรวจราคาสินค้า
-        const [productRows] = await connection.query('SELECT name, price FROM products WHERE id = ?', [productId]);
-        if (productRows.length === 0) throw new Error('ไม่พบสินค้า');
-        const { price, name } = productRows[0];
-
-        if (parseFloat(userRows[0].points) < parseFloat(price)) {
-            return res.status(400).json({ message: 'พ้อยท์ของคุณไม่เพียงพอ กรุณาเติมเงินก่อนครับ' });
-        }
-
-        // 3. จองไอดีในคลัง + ล็อกแถวป้องกันคนแย่งตัวสุดท้าย
-        const [stockRows] = await connection.query('SELECT id, account_data FROM stocks WHERE product_id = ? AND status = "available" LIMIT 1 FOR UPDATE', [productId]);
-        if (stockRows.length === 0) {
-            return res.status(400).json({ message: 'ขออภัย สินค้าชิ้นนี้เพิ่งหมดไปเมื่อครู่นี้เอง' });
-        }
-        const { id: stockId, account_data: accountData } = stockRows[0];
-
-        // 4. หักเงิน / อัปเดตสถานะคลัง / บันทึก Log
-        await connection.query('UPDATE users SET points = points - ? WHERE id = ?', [price, userId]);
-        await connection.query('UPDATE stocks SET status = "sold", sold_to = ?, sold_at = NOW() WHERE id = ?', [userId, stockId]);
-        await connection.query('INSERT INTO transactions (user_id, type, amount, description, created_at) VALUES (?, "purchase", ?, ?, NOW())', [userId, price, `ซื้อสินค้า: ${name}`]);
-
-        await connection.commit();
-        return res.json({ message: 'ซื้อสินค้าสำเร็จ!', account_data: accountData });
-    } catch (err) {
-        await connection.rollback();
-        return res.status(500).json({ message: err.message || 'ระบบขัดข้อง คืนเงินเรียบร้อย' });
-    } finally {
-        connection.release();
-    }
-});
-
-// API 5: เติมเงินผ่านซองของขวัญ
+// 5. ระบบเติมเงินด้วยซองอั่งเปา (TrueMoney Wallet)
 app.post('/api/payment/topup', async (req, res) => {
     const { userId, voucherLink } = req.body;
-    if (!userId || !voucherLink) return res.status(400).json({ message: 'ข้อมูลไม่ครบถ้วน' });
+    
+    // ดึงเบอร์โทรศัพท์ทรูมันนี่ของคุณจาก Environment Variable
+    const myMobileNumber = 0947643009
 
-    const twResult = await redeemVouchers(OWNER_PHONE, voucherLink);
-    if (twResult.status !== 'SUCCESS') return res.status(400).json({ message: twResult.reason });
+    if (!voucherLink.includes('gift.truemoney.com/apple-app-api/v1/redeem/')) {
+        return res.status(400).json({ message: 'ลิงก์ซองของขวัญไม่ถูกต้อง' });
+    }
 
-    const amount = twResult.amount;
-    const connection = await pool.getConnection();
+    const code = voucherLink.split('/redeem/')[1]?.split('?')[0];
 
     try {
-        await connection.beginTransaction();
-        await connection.query('UPDATE users SET points = points + ? WHERE id = ?', [amount, userId]);
-        await connection.query('INSERT INTO transactions (user_id, type, amount, description, created_at) VALUES (?, "topup", ?, "เติมเงินผ่านซอง TrueMoney Wallet", NOW())', [userId, amount]);
-        await connection.commit();
-        return res.json({ message: `เติมเงินสำเร็จ! ได้รับ ฿${amount}.00`, amount });
-    } catch (err) {
-        await connection.rollback();
-        return res.status(500).json({ message: 'เกิดข้อผิดพลาดในการบันทึกพ้อยท์' });
-    } finally {
-        connection.release();
+        // ยิงไปตรวจสอบและรับเงินจาก API TrueMoney Wallet จริง
+        const response = await axios.post(`https://gift.truemoney.com/apple-app-api/v1/redeem/${code}/co`, {
+            mobile: myMobileNumber,
+            voucher_hash: code
+        }, {
+            headers: { 'Content-Type': 'application/json' }
+        });
+
+        if (response.data.status.code === 'SUCCESS') {
+            const amount = parseFloat(response.data.data.voucher.amount_baht);
+            
+            // อัปเดตพ้อยท์ให้ผู้ใช้ใน Database
+            db.query('UPDATE users SET points = points + ? WHERE id = ?', [amount, userId], (err) => {
+                if (err) return res.status(500).json({ message: 'เติมเงินสำเร็จแต่บันทึกแต้มล้มเหลว กรุณาติดต่อแอดมิน' });
+                
+                // บันทึกประวัติ
+                db.query('INSERT INTO history (user_id, type, description, amount) VALUES (?, ?, ?, ?)', 
+                    [userId, 'topup', `เติมเงินผ่านซองอั่งเปา อ้างอิง: ${code}`, amount]);
+
+                res.json({ message: `เติมเงินสำเร็จเรียบร้อย ได้รับเงินจำนวน ฿${amount}` });
+            });
+        } else {
+            res.status(400).json({ message: 'ซองอั่งเปานี้ถูกใช้งานไปแล้วหรือลิงก์หมดอายุ' });
+        }
+    } catch (error) {
+        res.status(500).json({ message: 'ไม่สามารถเชื่อมต่อกับระบบ TrueMoney ได้ในขณะนี้ หรือซองไม่ถูกต้อง' });
     }
 });
 
-// API 6: ดึงประวัติธุรกรรม
-app.get('/api/user/history/:userId', async (req, res) => {
-    try {
-        const [rows] = await pool.query('SELECT type, amount, description, DATE_FORMAT(created_at, "%Y-%m-%d %H:%i") as date FROM transactions WHERE user_id = ? ORDER BY id DESC', [req.params.userId]);
-        return res.json(rows);
-    } catch (err) {
-        return res.status(500).json({ message: 'โหลดประวัติล้มเหลว' });
-    }
+// 6. ดึงประวัติการทำรายการของผู้ใช้
+app.get('/api/user/history/:userId', (req, res) => {
+    const { userId } = req.params;
+    db.query('SELECT type, description, amount, DATE_FORMAT(date, "%Y-%m-%d %H:%i") as date FROM history WHERE user_id = ? ORDER BY id DESC', [userId], (err, results) => {
+        if (err) return res.status(500).json({ message: 'ดึงประวัติล้มเหลว' });
+        res.json(results);
+    });
 });
 
-app.listen(3000, () => console.log('เซิร์ฟเวอร์ TESTHUB-SHOP เปิดใช้งานที่พอร์ต 3000 แล้ว'));
+app.listen(PORT, () => {
+    console.log(`Server is running on port ${PORT}`);
+});
