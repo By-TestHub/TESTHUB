@@ -20,7 +20,7 @@
         }
 
         body {
-            /* พื้นหลังดาร์กน้ำเงิน-ดำ เน้นออร่าฟ้าไฟฟ้า */
+            /* พื้นหลังดาร์กน้ำเงิน-ดำ ออร่าฟ้าไฟฟ้า */
             background: radial-gradient(circle at center, #001630 0%, #01040a 100%);
             min-height: 100vh;
             display: flex;
@@ -31,23 +31,23 @@
             overflow-x: hidden;
         }
 
-        /* การ์ดหลัก ขยายความกว้างสูงสุดเป็น 550px เพื่อให้วิดีโอตัวใหญ่เต็มตา */
+        /* การ์ดหลัก คุมโทนฟ้าไฟฟ้านีออน */
         .card {
             background: rgba(2, 10, 24, 0.9);
             backdrop-filter: blur(12px);
             border: 1.5px solid #00d2ff;
             border-radius: 24px;
             width: 100%;
-            max-width: 550px;
-            padding: 40px 25px;
+            max-width: 480px;
+            padding: 35px 25px;
             text-align: center;
             box-shadow: 0 20px 50px rgba(0, 0, 0, 0.9), 
                         0 0 40px rgba(0, 210, 255, 0.2);
         }
 
-        /* หัวข้อ TEST HUB สีฟ้าเรืองแสงไฟฟ้า */
+        /* หัวข้อ TEST HUB */
         .title {
-            font-size: 3rem;
+            font-size: 2.8rem;
             font-weight: 600;
             letter-spacing: 2px;
             color: #00d2ff;
@@ -60,7 +60,16 @@
         .button-group {
             display: flex;
             flex-direction: column;
-            gap: 15px;
+            gap: 12px;
+        }
+
+        /* ข้อความอธิบายด้านบนปุ่มเข้าดิสคอส */
+        .top-desc {
+            font-size: 1.1rem;
+            color: #ffffff;
+            font-weight: 400;
+            margin-bottom: 5px;
+            letter-spacing: 0.5px;
         }
 
         .btn {
@@ -79,7 +88,7 @@
             border: none;
         }
 
-        /* ปุ่มที่ 1: Discord ลิงก์ตรง */
+        /* ปุ่มที่ 1: Discord */
         .btn-discord {
             background: linear-gradient(135deg, #5865F2 0%, #2b39c0 100%);
             color: #ffffff;
@@ -92,14 +101,14 @@
 
         /* ข้อความอธิบายด้านล่างปุ่มเข้าดิสคอส */
         .discord-desc {
-            font-size: 1rem;
+            font-size: 0.95rem;
             color: #00d2ff;
-            font-weight: 400;
-            margin: 5px 0 15px 0;
-            text-shadow: 0 0 8px rgba(0, 210, 255, 0.5);
+            font-weight: 300;
+            margin: 4px 0 15px 0;
+            text-shadow: 0 0 8px rgba(0, 210, 255, 0.4);
         }
 
-        /* ปุ่มที่ 2: วิธีซื้อสคริปต์ (สีฟ้าไฟฟ้านีออนสว่างจัด) */
+        /* ปุ่มที่ 2: วิธีซื้อสคริปต์ */
         .btn-guide {
             background: linear-gradient(135deg, #0077ff 0%, #00d2ff 100%);
             color: #ffffff;
@@ -107,38 +116,37 @@
         }
         .btn-guide:hover {
             transform: scale(1.02);
-            box-shadow: 0 8px 30px rgba(0, 210, 255, 0.8),
-                        0 0 20px rgba(0, 210, 255, 0.5);
+            box-shadow: 0 8px 30px rgba(0, 210, 255, 0.8);
         }
 
         .btn i {
             font-size: 1.3rem;
         }
 
-        /* กล่องเก็บวิดีโอขนาดใหญ่ (แสดงผลทันทีไม่มีดีเลย์เลื่อนช้า) */
+        /* กล่องเก็บวิดีโอแนวตั้ง 9:16 (แก้ให้แสดงผลทันทีและไม่โดนตัดขอบ) */
         .video-box {
             display: none; /* ซ่อนไว้เริ่มต้น */
             width: 100%;
-            border-radius: 16px;
+            max-width: 340px; /* จำกัดความกว้างไม่ให้วิดีโอแนวตั้งยาวเกินไปบน PC */
+            margin: 25px auto 0 auto;
+            border-radius: 20px;
             background: #000;
-            margin-top: 25px;
             border: 2.5px solid #00d2ff;
             overflow: hidden;
-            /* แอนิเมชันกระแสไฟสีฟ้าวิ่งรอบกรอบ */
             animation: electric-glow 2.5s infinite ease-in-out;
         }
 
-        /* คลาสเปิดใช้งานวิดีโอแบบทันที */
+        /* คลาสเปิดใช้งานวิดีโอทันที */
         .video-box.active {
             display: block;
         }
 
-        /* ตัวเล่นวิดีโอขนาดใหญ่ รองรับมือถือ ไม่โดนครอปภาพ */
+        /* ปรับวิดีโอให้ยาวตามอัตราส่วนหน้าจอมือถือจริง (TrueWallet) */
         .video-box video {
             width: 100%;
             height: auto;
             display: block;
-            border-radius: 14px;
+            object-fit: contain; /* มั่นใจได้ว่าภาพมาเต็มจอ ไม่โดนตัดหัวตัดท้าย */
         }
 
         /* แอนิเมชันกระแสไฟฟ้าวิ่งสีฟ้า */
@@ -157,10 +165,10 @@
             }
         }
 
-        /* Responsive สำหรับหน้าจอมือถือขนาดเล็ก */
+        /* รองรับหน้าจอมือถือ */
         @media (max-width: 480px) {
             .card {
-                padding: 30px 15px;
+                padding: 30px 20px;
             }
             .title {
                 font-size: 2.4rem;
@@ -169,8 +177,8 @@
                 font-size: 1.1rem;
                 padding: 14px 15px;
             }
-            .discord-desc {
-                font-size: 0.9rem;
+            .video-box {
+                max-width: 100%; /* บนมือถือให้กว้างเต็มหน้าจอไปเลย */
             }
         }
     </style>
@@ -184,7 +192,10 @@
         <!-- กลุ่มปุ่มกดและคำอธิบาย -->
         <div class="button-group">
             
-            <!-- ปุ่มที่ 1: ลิงก์เข้า Discord จริงของคุณ -->
+            <!-- คำอธิบายด้านบนปุ่มเข้าดิสคอส -->
+            <p class="top-desc">✦ ยินดีต้อนรับสู่ระบบซื้อขายสคริปต์ ✦</p>
+
+            <!-- ปุ่มที่ 1: ลิงก์เข้า Discord -->
             <a href="https://discord.gg/Ttwq9Udwhc" target="_blank" class="btn btn-discord">
                 <i class="fab fa-discord"></i> เข้าร่วม Discord
             </a>
@@ -199,13 +210,13 @@
             
         </div>
 
-        <!-- กล่องแสดงวิดีโอขนาดใหญ่ (เปิดใช้งานทันทีเมื่อกดปุ่ม) -->
+        <!-- กล่องแสดงวิดีโอแนวตั้งเต็มจอสไตล์มือถือ (เปิดใช้งานทันทีเมื่อกดปุ่ม) -->
         <div id="videoContainer" class="video-box">
             <video id="myVideo" src="88e39a28-563c-4409-b9a1-cc29fe51b7c2.mp4" controls preload="metadata"></video>
         </div>
     </div>
 
-    <!-- JavaScript ควบคุมการแสดงผลทันทีและการหยุดคลิป -->
+    <!-- JavaScript ควบคุมการแสดงผลทันที -->
     <script>
         function toggleVideoInstant() {
             var videoBox = document.getElementById("videoContainer");
@@ -214,11 +225,11 @@
             // สลับเปิด-ปิดใช้งานกล่องวิดีโอทันที
             videoBox.classList.toggle("active");
             
-            // ถ้าสั่งปิดหน้าต่าง ให้หยุดเล่นเสียงวิดีโอด้วย
+            // ถ้าสั่งปิดหน้าต่าง ให้หยุดเล่นวิดีโอ
             if (!videoBox.classList.contains("active")) {
                 videoPlayer.pause();
             } else {
-                // ถ้าสั่งเปิด ให้เริ่มเล่นวิดีโออัตโนมัติ (เลือกเปิดใช้หรือไม่ก็ได้)
+                // ถ้ากดเปิด ให้เล่นวิดีโอโดยอัตโนมัติ
                 videoPlayer.play();
             }
         }
