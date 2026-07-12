@@ -3,353 +3,194 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TESTHUB-SHOP</title>
-    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <title>TEST HUB</title>
+    <!-- นำเข้าฟอนต์ Google Font (Kanit) เพื่อความโมเดิร์น -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;600&display=swap" rel="stylesheet">
+    <!-- นำเข้า Icon จาก Font Awesome สำหรับโลโก้ Discord -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700&display=swap');
-        body { font-family: 'Kanit', sans-serif; }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Kanit', sans-serif;
+        }
+
+        body {
+            /* พื้นหลังไล่เฉดสีมืดสไตล์อวกาศโทนม่วงแบบในรูป */
+            background: radial-gradient(circle at center, #160a2b 0%, #060309 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            color: #ffffff;
+            overflow-x: hidden;
+        }
+
+        /* การ์ดสไตล์ Glassmorphism ผสมนีออน */
+        .card {
+            background: rgba(19, 9, 34, 0.75);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(138, 43, 226, 0.2);
+            border-radius: 24px;
+            width: 100%;
+            max-width: 480px;
+            padding: 40px 30px;
+            text-align: center;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6), 
+                        0 0 40px rgba(114, 9, 183, 0.15);
+            transition: transform 0.3s ease;
+        }
+
+        /* หัวข้อด้านบนสุด */
+        .title {
+            font-size: 2.5rem;
+            font-weight: 600;
+            letter-spacing: 2px;
+            color: #ffffff;
+            text-shadow: 0 0 10px rgba(188, 19, 254, 0.6),
+                         0 0 20px rgba(188, 19, 254, 0.3);
+            margin-bottom: 10px;
+        }
+
+        /* คำอธิบายใต้หัวข้อ (แทนรูปภาพ) */
+        .description {
+            font-size: 1rem;
+            color: #b0a2c7;
+            font-weight: 300;
+            line-height: 1.6;
+            margin-bottom: 25px;
+        }
+
+        /* ตัวแบ่งเส้นตกแต่งแบบในรูป */
+        .divider {
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(188, 19, 254, 0.5), transparent);
+            margin-bottom: 25px;
+            position: relative;
+        }
+        .divider::after {
+            content: '✦';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: #bc13fe;
+            font-size: 0.8rem;
+            background: #130922;
+            padding: 0 8px;
+        }
+
+        /* กล่องใส่วิดีโอ */
+        .video-container {
+            width: 100%;
+            border-radius: 14px;
+            overflow: hidden;
+            border: 1px solid rgba(188, 19, 254, 0.3);
+            box-shadow: 0 0 15px rgba(188, 19, 254, 0.1);
+            margin-bottom: 30px;
+            aspect-ratio: 16 / 9; /* ล็อคอัตราส่วนวิดีโอ */
+            background: #000;
+        }
+        .video-container iframe, .video-container video {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
+        /* ส่วนของกลุ่มปุ่ม */
+        .button-group {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        /* สไตล์ปุ่มพื้นฐาน */
+        .btn {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+            width: 100%;
+            padding: 14px 20px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            text-decoration: none;
+            border-radius: 14px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        /* ปุ่มที่ 1: Discord (ไล่เฉดสีม่วงนีออนแบบในรูปภาพตัวอย่าง) */
+        .btn-discord {
+            background: linear-gradient(135deg, #7300ff 0%, #bd00ff 100%);
+            color: #ffffff;
+            box-shadow: 0 4px 20px rgba(189, 0, 255, 0.4),
+                        inset 0 0 10px rgba(255, 255, 255, 0.2);
+        }
+        .btn-discord:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 25px rgba(189, 0, 255, 0.6),
+                        inset 0 0 15px rgba(255, 255, 255, 0.3);
+        }
+
+        /* ปุ่มที่ 2: วิธีซื้อสคริปต์ (สไตล์โปร่งแสงขอบนีออน) */
+        .btn-guide {
+            background: rgba(255, 255, 255, 0.03);
+            color: #dcb5ff;
+            border: 1px solid rgba(188, 19, 254, 0.4);
+            box-shadow: inset 0 0 10px rgba(188, 19, 254, 0.1);
+        }
+        .btn-guide:hover {
+            background: rgba(188, 19, 254, 0.1);
+            color: #ffffff;
+            border-color: #hd00ff;
+            transform: translateY(-3px);
+            box-shadow: 0 0 15px rgba(188, 19, 254, 0.3);
+        }
+
+        .btn i {
+            font-size: 1.3rem;
+        }
     </style>
 </head>
-<body class="bg-slate-50 text-slate-800 min-h-screen flex flex-col">
+<body>
 
-    <!-- 1. แถบเมนูด้านบน (Navbar) รองรับมือถือและคอม -->
-    <nav class="bg-blue-600 text-white shadow-md sticky top-0 z-50">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex items-center justify-between h-16">
-                <div class="flex-shrink-0 flex items-center space-x-2">
-                    <i class="fa-solid fa-shield-halved text-2xl text-cyan-300"></i>
-                    <span class="font-bold text-xl tracking-wider">TESTHUB-SHOP</span>
-                </div>
-                
-                <div class="hidden md:flex space-x-2 items-center">
-                    <button onclick="switchPage('home')" id="nav-home" class="px-3 py-2 rounded-md text-sm font-medium bg-blue-700 cursor-pointer"><i class="fa-solid fa-house mr-1"></i> หน้าหลัก</button>
-                    <button onclick="switchPage('topup')" id="nav-topup" class="px-3 py-2 rounded-md text-sm font-medium hover:bg-blue-500 transition cursor-pointer"><i class="fa-solid fa-wallet mr-1"></i> เติมเงิน</button>
-                    <button onclick="switchPage('history')" id="nav-history" class="px-3 py-2 rounded-md text-sm font-medium hover:bg-blue-500 transition cursor-pointer"><i class="fa-solid fa-history mr-1"></i> ประวัติการใช้งาน</button>
-                </div>
-
-                <div class="flex items-center space-x-2">
-                    <div id="user-status" class="hidden flex items-center space-x-2">
-                        <div class="bg-blue-700 px-3 py-1.5 rounded-full text-sm font-medium border border-blue-400">
-                            <i class="fa-solid fa-coins text-amber-400 mr-1"></i> Points: <span id="user-points" class="font-bold">0</span>
-                        </div>
-                        <span id="user-display-name" class="text-sm font-medium bg-blue-800 px-2.5 py-1.5 rounded-md hidden sm:inline"></span>
-                        <button onclick="logout()" class="text-red-200 hover:text-white p-1.5 text-sm font-medium transition cursor-pointer"><i class="fa-solid fa-right-from-bracket"></i></button>
-                    </div>
-
-                    <button id="login-btn" onclick="openModal()" class="bg-cyan-400 hover:bg-cyan-300 text-blue-900 px-4 py-1.5 rounded-md text-sm font-bold transition shadow-sm cursor-pointer">
-                        <i class="fa-solid fa-right-to-bracket mr-1"></i> เข้าสู่ระบบ
-                    </button>
-
-                    <button onclick="toggleMobileMenu()" class="md:hidden text-white p-2 focus:outline-none cursor-pointer">
-                        <i class="fa-solid fa-bars text-xl"></i>
-                    </button>
-                </div>
-            </div>
-        </div>
-
-        <div id="mobile-menu" class="hidden md:hidden bg-blue-700 px-4 pt-2 pb-4 space-y-1 border-t border-blue-500">
-            <button onclick="switchPage('home'); toggleMobileMenu();" class="block w-full text-left px-3 py-2 rounded-md text-base font-medium text-white hover:bg-blue-600"><i class="fa-solid fa-house mr-2"></i>หน้าหลัก</button>
-            <button onclick="switchPage('topup'); toggleMobileMenu();" class="block w-full text-left px-3 py-2 rounded-md text-base font-medium text-white hover:bg-blue-600"><i class="fa-solid fa-wallet mr-2"></i>เติมเงิน</button>
-            <button onclick="switchPage('history'); toggleMobileMenu();" class="block w-full text-left px-3 py-2 rounded-md text-base font-medium text-white hover:bg-blue-600"><i class="fa-solid fa-history mr-2"></i>ประวัติการใช้งาน</button>
-        </div>
-    </nav>
-
-    <!-- 2. แอดมินจัดการหลังบ้าน -->
-    <div id="admin-panel" class="hidden max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 mt-6">
-        <div class="bg-white rounded-2xl p-6 shadow-sm border border-amber-200 bg-gradient-to-b from-amber-50/30 to-white">
-            <div class="flex items-center space-x-2 border-b border-amber-200 pb-3 mb-4">
-                <i class="fa-solid fa-sliders text-amber-600 text-xl"></i>
-                <h2 class="text-lg font-bold text-slate-800">ระบบจัดการร้านค้า (แอดมินหลังบ้าน)</h2>
-            </div>
-            <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-                <button class="p-4 bg-slate-50 hover:bg-blue-50 border border-slate-200 rounded-xl text-center transition"><i class="fa-solid fa-chart-line text-2xl text-blue-500 mb-1 block"></i><span class="text-xs">แดชบอร์ด</span></button>
-                <button class="p-4 bg-slate-50 hover:bg-blue-50 border border-slate-200 rounded-xl text-center transition"><i class="fa-solid fa-boxes-packing text-2xl text-blue-500 mb-1 block"></i><span class="text-xs">จัดการคลังไก่ตัน</span></button>
-                <button class="p-4 bg-slate-50 hover:bg-blue-50 border border-slate-200 rounded-xl text-center transition"><i class="fa-solid fa-users text-2xl text-blue-500 mb-1 block"></i><span class="text-xs">จัดการผู้ใช้</span></button>
-                <button class="p-4 bg-slate-50 hover:bg-blue-50 border border-slate-200 rounded-xl text-center transition"><i class="fa-solid fa-images text-2xl text-blue-500 mb-1 block"></i><span class="text-xs">จัดการภาพสไลด์</span></button>
-            </div>
-        </div>
-    </div>
-
-    <!-- ================= PAGE 1: HOME ================= -->
-    <div id="page-home" class="page-content max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 mt-6 flex-grow p-2">
-        <div class="bg-gradient-to-r from-blue-500 to-cyan-500 rounded-2xl p-8 text-white shadow-lg flex flex-col md:flex-row items-center justify-between min-h-[200px] mb-8">
-            <div class="space-y-2">
-                <span class="bg-blue-700/50 text-cyan-200 text-xs px-3 py-1 rounded-full font-bold">TESTHUB-SHOP ONLINE</span>
-                <h1 class="text-3xl font-extrabold">ศูนย์รวมไอดีไก่ตัน อัตโนมัติ 24 ชม.</h1>
-                <p class="text-blue-100 text-sm">เลือกแมพที่ชอบ แล้วกดซื้อได้เลย ระบบจัดส่งไอดีทันที!</p>
-            </div>
-            <div class="mt-4 md:mt-0 bg-white/10 backdrop-blur-sm rounded-xl border border-white/20 p-4 text-center">
-                <span class="text-xs font-mono text-cyan-100 block">BANNER SLOT</span>
-                <div class="text-xl font-bold text-white">1320 x 400</div>
-            </div>
-        </div>
-
-        <div class="flex items-center space-x-2 border-b-2 border-blue-500 pb-2 mb-6">
-            <i class="fa-solid fa-fire text-blue-600 text-xl"></i>
-            <h2 class="text-xl font-bold text-slate-800">สินค้าแนะนำ</h2>
-        </div>
-        <div id="product-list-box" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-            <!-- ดึงรายการสินค้าแบบ Dynamic จากฐานข้อมูลมาใส่ตรงนี้ -->
-        </div>
-    </div>
-
-    <!-- ================= PAGE 2: TOPUP ================= -->
-    <div id="page-topup" class="page-content hidden max-w-4xl mx-auto w-full px-4 sm:px-6 lg:px-8 mt-6 flex-grow">
-        <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-200 mb-8">
-            <div class="flex items-center space-x-2 border-b border-slate-100 pb-3 mb-6">
-                <i class="fa-solid fa-wallet text-blue-600 text-xl"></i>
-                <h2 class="text-xl font-bold text-slate-800">ระบบเติมเงินอัตโนมัติ</h2>
-            </div>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div class="border border-slate-100 rounded-xl p-5 bg-slate-50/50">
-                    <div class="flex items-center space-x-2 text-pink-500 font-bold mb-3">
-                        <i class="fa-solid fa-envelope-open-text text-lg"></i>
-                        <span>TrueMoney Wallet (ซองของขวัญ)</span>
-                    </div>
-                    <p class="text-xs text-slate-500 mb-4">สร้างซองของขวัญแบบ "แบ่งเท่ากัน" แล้วนำลิงก์มาวางด้านล่าง</p>
-                    <input type="text" id="wallet-link" class="w-full p-2.5 bg-white border border-slate-200 rounded-lg text-sm focus:outline-none focus:border-blue-500 mb-3" placeholder="https://gift.truemoney.com/...">
-                    <button onclick="submitTopup()" class="w-full bg-pink-500 hover:bg-pink-600 text-white font-bold p-2.5 rounded-lg text-sm transition cursor-pointer">ตรวจสอบซองของขวัญ</button>
-                </div>
-                <div class="border border-slate-100 rounded-xl p-5 bg-slate-50/50 flex flex-col items-center justify-center text-center">
-                    <div class="flex items-center space-x-2 text-blue-900 font-bold mb-2">
-                        <i class="fa-solid fa-qrcode text-lg"></i>
-                        <span>PromptPay QR Code</span>
-                    </div>
-                    <p class="text-xs text-slate-500 mb-3">สแกนจ่ายขั้นต่ำ 1 บาท อนุมัติทันที</p>
-                    <div class="w-32 h-32 bg-slate-200 rounded border border-slate-300 flex items-center justify-center font-mono text-xs text-slate-400">QR CODE SLOT</div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- ================= PAGE 3: HISTORY ================= -->
-    <div id="page-history" class="page-content hidden max-w-5xl mx-auto w-full px-4 sm:px-6 lg:px-8 mt-6 flex-grow">
-        <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-200 space-y-8 mb-8">
-            <div>
-                <div class="flex items-center space-x-2 border-b border-slate-100 pb-2 mb-4">
-                    <i class="fa-solid fa-history text-blue-600"></i>
-                    <h3 class="font-bold text-slate-800">ประวัติการทำรายการย้อนหลังทั้งหมด</h3>
-                </div>
-                <div class="overflow-x-auto">
-                    <table class="w-full text-left text-sm">
-                        <thead class="bg-slate-50 text-slate-600 font-medium">
-                            <tr>
-                                <th class="p-3 rounded-l-lg">ประเภท</th>
-                                <th class="p-3">รายละเอียดการทำรายการ / คีย์ข้อมูลที่ได้รับ</th>
-                                <th class="p-3">จำนวน</th>
-                                <th class="p-3 rounded-r-lg">วันเวลา</th>
-                            </tr>
-                        </thead>
-                        <tbody id="history-box" class="text-slate-700 divide-y divide-slate-100">
-                            <tr><td colspan="4" class="p-4 text-center text-slate-400 text-xs">กรุณาเข้าสู่ระบบก่อนเช็กประวัติครับ</td></tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <footer class="bg-slate-900 text-slate-400 py-6 text-center text-sm mt-auto">
-        <p>© 2026 TESTHUB-SHOP. All Rights Reserved.</p>
-    </footer>
-
-    <!-- POPUP MODAL -->
-    <div id="auth-modal" class="hidden fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4">
-        <div class="bg-white rounded-2xl shadow-xl w-full max-w-md overflow-hidden border border-slate-100">
-            <div class="bg-blue-600 text-white p-4 flex justify-between items-center">
-                <h3 id="modal-title" class="text-lg font-bold"><i class="fa-solid fa-lock mr-2"></i>เข้าสู่ระบบสมาชิก</h3>
-                <button onclick="closeModal()" class="text-white/80 hover:text-white text-xl cursor-pointer">&times;</button>
-            </div>
-            <form onsubmit="handleSubmit(event)" class="p-6 space-y-4">
-                <div>
-                    <label class="block text-sm font-medium text-slate-700 mb-1">Username</label>
-                    <input type="text" id="username" required class="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-lg text-sm focus:outline-none focus:border-blue-500" placeholder="ชื่อผู้ใช้งาน">
-                </div>
-                <div>
-                    <label class="block text-sm font-medium text-slate-700 mb-1">Password</label>
-                    <input type="password" id="password" required class="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-lg text-sm focus:outline-none focus:border-blue-500" placeholder="รหัสผ่าน">
-                </div>
-                <div id="confirm-password-box" class="hidden">
-                    <label class="block text-sm font-medium text-slate-700 mb-1">Confirm Password</label>
-                    <input type="password" id="confirm-password" class="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-lg text-sm focus:outline-none focus:border-blue-500" placeholder="กรอกรหัสผ่านยืนยันอีกครั้ง">
-                </div>
-                <button type="submit" id="submit-btn" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold p-2.5 rounded-lg text-sm transition cursor-pointer">เข้าสู่ระบบ</button>
-                <div class="text-center text-xs text-slate-500 pt-2">
-                    <button type="button" onclick="toggleForm()" id="switch-btn" class="text-blue-600 font-bold hover:underline cursor-pointer">สมัครสมาชิกที่นี่</button>
-                </div>
-            </form>
-        </div>
-    </div>
-
-    <!-- SYSTEM JAVASCRIPT SYSTEM REAL API -->
-    <script>
-        let isLoginMode = true;
-        let currentUser = null;
-
-        window.onload = function() { loadProducts(); };
-
-        function toggleMobileMenu() { document.getElementById('mobile-menu').classList.toggle('hidden'); }
-        function openModal() { document.getElementById('auth-modal').classList.remove('hidden'); }
-        function closeModal() { document.getElementById('auth-modal').classList.add('hidden'); }
+    <div class="card">
+        <!-- หัวข้อหลัก -->
+        <div class="title">TEST HUB</div>
         
-        function switchPage(pageId) {
-            document.querySelectorAll('.page-content').forEach(p => p.classList.add('hidden'));
-            document.getElementById(`page-${pageId}`).classList.remove('hidden');
-            if(pageId === 'history') loadHistory();
-        }
+        <!-- คำอธิบายแทนรูปภาพ -->
+        <p class="description">
+            ยินดีต้อนรับสู่ TEST HUB แหล่งรวบรวมสคริปต์ที่ดีที่สุด ปลอดภัย เสถียร และอัปเดตใหม่ตลอดเวลา เลือกเมนูด้านล่างเพื่อเข้าร่วมชุมชนหรือดูขั้นตอนการสั่งซื้อได้เลยครับ
+        </p>
 
-        function toggleForm() {
-            isLoginMode = !isLoginMode;
-            const confirmBox = document.getElementById('confirm-password-box');
-            if (!isLoginMode) {
-                document.getElementById('modal-title').innerHTML = '<i class="fa-solid fa-user-plus mr-2"></i>สมัครสมาชิกใหม่';
-                document.getElementById('submit-btn').innerText = 'สร้างบัญชีผู้ใช้';
-                document.getElementById('switch-btn').innerText = 'เข้าสู่ระบบที่นี่';
-                confirmBox.classList.remove('hidden');
-            } else {
-                document.getElementById('modal-title').innerHTML = '<i class="fa-solid fa-lock mr-2"></i>เข้าสู่ระบบสมาชิก';
-                document.getElementById('submit-btn').innerText = 'เข้าสู่ระบบ';
-                document.getElementById('switch-btn').innerText = 'สมัครสมาชิกที่นี่';
-                confirmBox.classList.add('hidden');
-            }
-        }
+        <!-- เส้นแบ่งดีไซน์ -->
+        <div class="divider"></div>
 
-        // ดึงข้อมูลสินค้าจากหลังบ้านมาจัดแสดง
-        async function loadProducts() {
-            const res = await fetch('/api/marketplace/products');
-            const data = await res.json();
-            let html = '';
-            data.forEach(p => {
-                html += `
-                <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden hover:shadow-md transition flex flex-col">
-                    <div class="h-36 bg-gradient-to-br from-blue-600 to-indigo-700 flex flex-col items-center justify-center text-white relative">
-                        <span class="text-lg font-bold">${p.category}</span>
-                        <span class="text-xs bg-blue-800 px-2 py-0.5 rounded mt-1">คงเหลือ ${p.stock_count} ชิ้น</span>
-                    </div>
-                    <div class="p-4 flex-grow flex flex-col justify-between space-y-4">
-                        <h3 class="font-bold text-sm text-slate-800">${p.name}</h3>
-                        <div class="flex items-center justify-between">
-                            <span class="text-lg font-bold text-blue-600">฿${p.price}</span>
-                            <button onclick="buyProduct(${p.id})" class="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1.5 rounded-md text-xs font-medium transition cursor-pointer">ซื้อสินค้า</button>
-                        </div>
-                    </div>
-                </div>`;
-            });
-            document.getElementById('product-list-box').innerHTML = html;
-        }
+        <!-- โซนวิดีโอ (เปลี่ยน URL ตรง src ได้ตามต้องการ) -->
+        <div class="video-container">
+            <!-- ตัวอย่าง: ใช้ลิงก์ YouTube Embed (อย่าลืมเปลี่ยนหลัง /embed/ เป็น ID คลิปของคุณ) -->
+            <iframe src="https://www.youtube.com/embed/dQw4w9WgXcQ" allowfullscreen></iframe>
+        </div>
 
-        // สมัครสมาชิก & เข้าสู่ระบบจริงผ่าน API
-        async function handleSubmit(event) {
-            event.preventDefault();
-            const username = document.getElementById('username').value;
-            const password = document.getElementById('password').value;
-            const confirmPassword = document.getElementById('confirm-password').value;
+        <!-- กลุ่มปุ่มกด -->
+        <div class="button-group">
+            <!-- ปุ่มที่ 1: ลิงก์ Discord (ใส่ลิงก์เชิญของคุณตรง href) -->
+            <a href="https://discord.gg/YOUR_INVITE_LINK" target="_blank" class="btn btn-discord">
+                <i class="fab fa-discord"></i> เข้าร่วม Discord
+            </a>
 
-            const url = isLoginMode ? '/api/auth/login' : '/api/auth/register';
-            const body = isLoginMode ? { username, password } : { username, password, confirmPassword };
+            <!-- ปุ่มที่ 2: วิธีซื้อสคริปต์ (ใส่ลิงก์คู่มือหรือหน้าเว็บสั่งซื้อตรง href) -->
+            <a href="https://your-website.com/how-to-buy" target="_blank" class="btn btn-guide">
+                <i class="fas fa-shopping-cart"></i> วิธีซื้อสคริปต์
+            </a>
+        </div>
+    </div>
 
-            const res = await fetch(url, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(body)
-            });
-            const data = await res.json();
-
-            if(!res.ok) { alert(data.message); return; }
-
-            alert(data.message);
-            if(!isLoginMode) { toggleForm(); return; }
-
-            currentUser = data.user;
-            updateUserUI();
-            closeModal();
-        }
-
-        function updateUserUI() {
-            document.getElementById('login-btn').classList.add('hidden');
-            document.getElementById('user-status').classList.remove('hidden');
-            document.getElementById('user-display-name').innerText = currentUser.username;
-            document.getElementById('user-points').innerText = currentUser.points;
-            if(currentUser.role === 'admin') document.getElementById('admin-panel').classList.remove('hidden');
-        }
-
-        function logout() {
-            currentUser = null;
-            document.getElementById('login-btn').classList.remove('hidden');
-            document.getElementById('user-status').classList.add('hidden');
-            document.getElementById('admin-panel').classList.add('hidden');
-            switchPage('home');
-        }
-
-        // ระบบสั่งซื้อตัดสต็อกจริง
-        async function buyProduct(productId) {
-            if(!currentUser) { alert('กรุณาเข้าสู่ระบบก่อนซื้อสินค้าครับ'); openModal(); return; }
-            
-            const res = await fetch('/api/marketplace/buy', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ userId: currentUser.id, productId })
-            });
-            const data = await res.json();
-
-            if(!res.ok) { alert(data.message); return; }
-
-            // เปิดหน้าต่างแจ้งรับไอดี
-            alert(`🎉 ซื้อสำเร็จ!\nไอดีของคุณคือ: \n\n${data.account_data}\n\n(คุณสามารถดูซ้ำได้ที่หน้าเมนูประวัติการใช้งาน)`);
-            
-            // อัปเดตพ้อยท์หน้าจอใหม่
-            currentUser.points = (parseFloat(currentUser.points) - parseFloat(data.pointsAdded || 0)).toFixed(2); 
-            location.reload(); // รีโหลดเพื่ออัปเดตสต็อกสดใหม่
-        }
-
-        // ระบบยิงเคลมซองของขวัญเข้ากระเป๋าจริง
-        async function submitTopup() {
-            if(!currentUser) { alert('กรุณาเข้าสู่ระบบก่อนทำการเติมเงินครับ'); return; }
-            const voucherLink = document.getElementById('wallet-link').value;
-            if(!voucherLink) { alert('กรุณาวางลิงก์ซองของขวัญก่อนกดตรวจครับ'); return; }
-
-            const res = await fetch('/api/payment/topup', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ userId: currentUser.id, voucherLink })
-            });
-            const data = await res.json();
-
-            if(!res.ok) { alert(data.message); return; }
-
-            alert(data.message);
-            document.getElementById('wallet-link').value = '';
-            location.reload();
-        }
-
-        // โหลดข้อมูลประวัติจริงจากหลังบ้าน
-        async function loadHistory() {
-            if(!currentUser) return;
-            const res = await fetch(`/api/user/history/${currentUser.id}`);
-            const data = await res.json();
-            let html = '';
-            
-            if(data.length === 0) {
-                document.getElementById('history-box').innerHTML = `<tr><td colspan="4" class="p-4 text-center text-slate-400 text-xs">ยังไม่มีประวัติการทำรายการในบัญชีนี้</td></tr>`;
-                return;
-            }
-
-            data.forEach(h => {
-                const badge = h.type === 'topup' ? '<span class="bg-emerald-100 text-emerald-700 px-2 py-0.5 rounded text-xs">เติมเงิน</span>' : '<span class="bg-blue-100 text-blue-700 px-2 py-0.5 rounded text-xs">ซื้อสินค้า</span>';
-                const amountColor = h.type === 'topup' ? 'text-emerald-600 font-bold' : 'text-red-500 font-bold';
-                const prefix = h.type === 'topup' ? '+' : '-';
-                
-                html += `
-                <tr>
-                    <td class="p-3">${badge}</td>
-                    <td class="p-3 font-medium text-slate-800">${h.description}</td>
-                    <td class="p-3 ${amountColor}">${prefix}฿${h.amount}</td>
-                    <td class="p-3 text-xs text-slate-400">${h.date}</td>
-                </tr>`;
-            });
-            document.getElementById('history-box').innerHTML = html;
-        }
-    </script>
 </body>
 </html>
