@@ -20,8 +20,8 @@
         }
 
         body {
-            /* ปรับพื้นหลังให้เป็นโทนน้ำเงิน-ดำ ฟ้าไฟฟ้า */
-            background: radial-gradient(circle at center, #001a33 0%, #020813 100%);
+            /* พื้นหลังดาร์กน้ำเงิน-ดำ สไตล์ฟ้าไฟฟ้า */
+            background: radial-gradient(circle at center, #001226 0%, #01050d 100%);
             min-height: 100vh;
             display: flex;
             justify-content: center;
@@ -31,11 +31,11 @@
             overflow-x: hidden;
         }
 
-        /* การ์ดสไตล์คุมโทนฟ้าไฟฟ้านีออน */
+        /* การ์ดหลักธีมฟ้าไฟฟ้านีออน */
         .card {
-            background: rgba(4, 16, 35, 0.85);
+            background: rgba(3, 12, 28, 0.85);
             backdrop-filter: blur(12px);
-            border: 1px solid rgba(0, 210, 255, 0.3);
+            border: 1px solid rgba(0, 210, 255, 0.25);
             border-radius: 24px;
             width: 100%;
             max-width: 480px;
@@ -45,7 +45,7 @@
                         0 0 35px rgba(0, 210, 255, 0.15);
         }
 
-        /* หัวข้อ TEST HUB สีฟ้าเรืองแสง */
+        /* หัวข้อ TEST HUB */
         .title {
             font-size: 2.8rem;
             font-weight: 600;
@@ -56,33 +56,13 @@
             margin-bottom: 12px;
         }
 
-        /* คำอธิบาย */
+        /* คำอธิบายด้านบน */
         .description {
             font-size: 0.95rem;
             color: #a4c2ec;
             font-weight: 300;
             line-height: 1.6;
-            margin-bottom: 25px;
-        }
-
-        /* เส้นแบ่งดีไซน์นีออนฟ้า */
-        .divider {
-            height: 1px;
-            background: linear-gradient(90deg, transparent, rgba(0, 210, 255, 0.6), transparent);
-            margin-bottom: 25px;
-            position: relative;
-        }
-        .divider::after {
-            content: '✦';
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            color: #00d2ff;
-            font-size: 0.8rem;
-            background: #041023;
-            padding: 0 8px;
-            text-shadow: 0 0 5px #00d2ff;
+            margin-bottom: 30px; /* เพิ่มระยะห่างทดแทนเส้นที่เอาออก */
         }
 
         /* โซนปุ่มกด */
@@ -90,7 +70,6 @@
             display: flex;
             flex-direction: column;
             gap: 15px;
-            margin-bottom: 20px;
         }
 
         .btn {
@@ -120,9 +99,9 @@
             box-shadow: 0 6px 25px rgba(88, 101, 242, 0.5);
         }
 
-        /* ปุ่มที่ 2: วิธีซื้อสคริปต์ (เน้นสีฟ้าเรืองแสงไฟฟ้า) */
+        /* ปุ่มที่ 2: วิธีซื้อสคริปต์ (สีฟ้าสว่างนีออน) */
         .btn-guide {
-            background: linear-gradient(135deg, #0099ff 0%, #00d2ff 100%);
+            background: linear-gradient(135deg, #0088ff 0%, #00d2ff 100%);
             color: #ffffff;
             box-shadow: 0 4px 20px rgba(0, 210, 255, 0.4);
         }
@@ -136,69 +115,66 @@
             font-size: 1.2rem;
         }
 
-        /* กล่องวิธีซื้อสคริปต์ที่ซ่อนไว้ (จะแสดงเมื่อกดปุ่ม) */
-        .guide-box {
+        /* กล่องเก็บวิดีโอที่จะสไลด์ลงมาเมื่อกดปุ่ม */
+        .video-box {
             max-height: 0;
             opacity: 0;
             overflow: hidden;
             transition: all 0.5s ease-in-out;
-            background: rgba(0, 40, 80, 0.4);
-            border: 1px solid rgba(0, 210, 255, 0);
             border-radius: 14px;
-            text-align: left;
-            padding: 0 20px;
-            box-shadow: inset 0 0 15px rgba(0, 210, 255, 0.05);
+            background: #000;
+            aspect-ratio: 16 / 9;
+            margin-top: 0;
+            border: 2px solid transparent;
         }
 
-        /* คลาสที่จะถูกใส่เพิ่มเมื่อคลิกเพื่อแสดงผล */
-        .guide-box.show {
-            max-height: 400px; /* ขยายความสูงให้แสดงเนื้อหา */
+        /* แสดงผลวิดีโอพร้อมแอนิเมชันกระแสไฟสีฟ้าวิ่ง */
+        .video-box.show {
+            max-height: 300px;
             opacity: 1;
-            padding: 20px;
-            margin-top: 15px;
-            border-color: rgba(0, 210, 255, 0.4);
-            box-shadow: inset 0 0 15px rgba(0, 210, 255, 0.1),
-                        0 0 15px rgba(0, 210, 255, 0.05);
+            margin-top: 25px;
+            border-color: #00d2ff;
+            animation: electric-pulse 3s infinite ease-in-out;
         }
 
-        .guide-title {
-            color: #00d2ff;
-            font-size: 1.1rem;
-            font-weight: 600;
-            margin-bottom: 12px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
+        .video-box video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
         }
 
-        .guide-step {
-            font-size: 0.9rem;
-            color: #c2d8f2;
-            margin-bottom: 8px;
-            line-height: 1.5;
-            list-style: none;
-        }
-
-        .guide-step span {
-            color: #00d2ff;
-            font-weight: 600;
-            margin-right: 5px;
+        /* แอนิเมชันแสงไฟฟ้าวิ่งรอบกรอบวิดีโอ */
+        @keyframes electric-pulse {
+            0% {
+                box-shadow: 0 0 12px rgba(0, 210, 255, 0.6), inset 0 0 8px rgba(0, 210, 255, 0.3);
+                border-color: #00d2ff;
+            }
+            33% {
+                box-shadow: 0 0 25px rgba(0, 90, 255, 0.8), inset 0 0 15px rgba(0, 90, 255, 0.4);
+                border-color: #005AFF;
+            }
+            66% {
+                box-shadow: 0 0 18px rgba(0, 255, 220, 0.7), inset 0 0 10px rgba(0, 255, 220, 0.3);
+                border-color: #00ffdc;
+            }
+            100% {
+                box-shadow: 0 0 12px rgba(0, 210, 255, 0.6), inset 0 0 8px rgba(0, 210, 255, 0.3);
+                border-color: #00d2ff;
+            }
         }
     </style>
 </head>
 <body>
 
     <div class="card">
-        <!-- หัวข้อหลักสีฟ้าไฟฟ้า -->
+        <!-- หัวข้อหลัก -->
         <div class="title">TEST HUB</div>
         
-        <!-- คำอธิบายด้านบนสุด -->
+        <!-- คำอธิบายด้านบนสุด (เอาเส้นใต้ตัวนี้ออกแล้ว) -->
         <p class="description">
             ยินดีต้อนรับสู่ TEST HUB แหล่งรวบรวมสคริปต์ประสิทธิภาพสูง เสถียร และปลอดภัยที่สุด เลือกกดปุ่มด้านล่างเพื่อเข้าสู่ดิสคอร์ดหรือดูขั้นตอนการสั่งซื้อได้เลย
         </p>
-
-        <!-- เส้นแบ่งดีไซน์ -->
-        <div class="divider"></div>
 
         <!-- กลุ่มปุ่มกด -->
         <div class="button-group">
@@ -207,30 +183,31 @@
                 <i class="fab fa-discord"></i> เข้าร่วม Discord
             </a>
 
-            <!-- ปุ่มที่ 2: วิธีซื้อสคริปต์ (กดแล้วจะเปิดกล่องข้อความด้านล่าง) -->
-            <button onclick="toggleGuide()" class="btn btn-guide">
+            <!-- ปุ่มที่ 2: วิธีซื้อสคริปต์ (กดแล้วสไลด์วิดีโอลงมา) -->
+            <button onclick="toggleVideo()" class="btn btn-guide">
                 <i class="fas fa-shopping-cart"></i> วิธีซื้อสคริปต์
             </button>
         </div>
 
-        <!-- กล่องแสดงวิธีซื้อ (ถูกซ่อนไว้ในตอนแรก) -->
-        <div id="buyGuide" class="guide-box">
-            <div class="guide-title">
-                <i class="fas fa-info-circle"></i> ขั้นตอนการสั่งซื้อสคริปต์
-            </div>
-            <li class="guide-step"><span>1.</span> เข้าร่วม Discord ของเราผ่านปุ่มด้านบน</li>
-            <li class="guide-step"><span>2.</span> ไปที่ห้อง <b>#วิธีซื้อ / #shop</b> เพื่อเช็คราคาและเปิดบิล</li>
-            <li class="guide-step"><span>3.</span> โอนเงินผ่านระบบ TrueWallet /ธนาคาร ตามที่ระบุ</li>
-            <li class="guide-step"><span>4.</span> ส่งสลิปให้แอดมินตรวจสอบ จากนั้นรับคีย์หรือระบบสคริปต์ใช้งานได้ทันที!</li>
+        <!-- กล่องแสดงวิดีโอเมื่อกดปุ่ม (เริ่มต้นจะถูกซ่อนไว้) -->
+        <div id="videoContainer" class="video-box">
+            <video id="myVideo" src="88e39a28-563c-4409-b9a1-cc29fe51b7c2.mp4" controls preload="metadata"></video>
         </div>
     </div>
 
-    <!-- ส่วนของ JavaScript สั่งเปิด-ปิดกล่องคู่มือวิธีซื้อ -->
+    <!-- JavaScript ควบคุมการเปิด-ปิด และการเล่นวิดีโอ -->
     <script>
-        function toggleGuide() {
-            var guide = document.getElementById("buyGuide");
-            // สลับเปิดและปิดคลาส .show
-            guide.classList.toggle("show");
+        function toggleVideo() {
+            var videoBox = document.getElementById("videoContainer");
+            var videoPlayer = document.getElementById("myVideo");
+            
+            // สลับคลาสเปิด/ปิดหน้าต่างวิดีโอ
+            videoBox.classList.toggle("show");
+            
+            // ถ้าย่อกล่องเก็บ ให้สั่งหยุดเล่นวิดีโอโดยอัตโนมัติ
+            if (!videoBox.classList.contains("show")) {
+                videoPlayer.pause();
+            }
         }
     </script>
 
