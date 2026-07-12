@@ -20,7 +20,6 @@
         }
 
         body {
-            /* พื้นหลังดาร์กน้ำเงิน-ดำ สไตล์ฟ้าไฟฟ้า */
             background: radial-gradient(circle at center, #001226 0%, #01050d 100%);
             min-height: 100vh;
             display: flex;
@@ -62,7 +61,7 @@
             color: #a4c2ec;
             font-weight: 300;
             line-height: 1.6;
-            margin-bottom: 30px; /* เพิ่มระยะห่างทดแทนเส้นที่เอาออก */
+            margin-bottom: 30px;
         }
 
         /* โซนปุ่มกด */
@@ -99,7 +98,7 @@
             box-shadow: 0 6px 25px rgba(88, 101, 242, 0.5);
         }
 
-        /* ปุ่มที่ 2: วิธีซื้อสคริปต์ (สีฟ้าสว่างนีออน) */
+        /* ปุ่มที่ 2: วิธีซื้อสคริปต์ */
         .btn-guide {
             background: linear-gradient(135deg, #0088ff 0%, #00d2ff 100%);
             color: #ffffff;
@@ -115,7 +114,7 @@
             font-size: 1.2rem;
         }
 
-        /* กล่องเก็บวิดีโอที่จะสไลด์ลงมาเมื่อกดปุ่ม */
+        /* กล่องเก็บวิดีโอ (ปรับปรุงให้รองรับวิดีโอทุกสัดส่วนแบบเต็มจอไม่โดนตัด) */
         .video-box {
             max-height: 0;
             opacity: 0;
@@ -123,25 +122,26 @@
             transition: all 0.5s ease-in-out;
             border-radius: 14px;
             background: #000;
-            aspect-ratio: 16 / 9;
             margin-top: 0;
             border: 2px solid transparent;
+            width: 100%;
         }
 
         /* แสดงผลวิดีโอพร้อมแอนิเมชันกระแสไฟสีฟ้าวิ่ง */
         .video-box.show {
-            max-height: 300px;
+            max-height: 600px; /* เพิ่มพื้นที่สูงสุดให้วิดีโอแสดงผลได้เต็มที่ */
             opacity: 1;
             margin-top: 25px;
             border-color: #00d2ff;
             animation: electric-pulse 3s infinite ease-in-out;
         }
 
+        /* ตัวเล่นวิดีโอปรับให้เห็นเต็มจอ 100% ไม่ครอปออก */
         .video-box video {
             width: 100%;
-            height: 100%;
-            object-fit: cover;
+            height: auto; /* ปรับความสูงอัตโนมัติตามคลิปจริง ไม่โดนตัดหัวตัดท้าย */
             display: block;
+            border-radius: 12px;
         }
 
         /* แอนิเมชันแสงไฟฟ้าวิ่งรอบกรอบวิดีโอ */
@@ -171,7 +171,7 @@
         <!-- หัวข้อหลัก -->
         <div class="title">TEST HUB</div>
         
-        <!-- คำอธิบายด้านบนสุด (เอาเส้นใต้ตัวนี้ออกแล้ว) -->
+        <!-- คำอธิบายด้านบนสุด -->
         <p class="description">
             ยินดีต้อนรับสู่ TEST HUB แหล่งรวบรวมสคริปต์ประสิทธิภาพสูง เสถียร และปลอดภัยที่สุด เลือกกดปุ่มด้านล่างเพื่อเข้าสู่ดิสคอร์ดหรือดูขั้นตอนการสั่งซื้อได้เลย
         </p>
@@ -183,13 +183,13 @@
                 <i class="fab fa-discord"></i> เข้าร่วม Discord
             </a>
 
-            <!-- ปุ่มที่ 2: วิธีซื้อสคริปต์ (กดแล้วสไลด์วิดีโอลงมา) -->
+            <!-- ปุ่มที่ 2: วิธีซื้อสคริปต์ -->
             <button onclick="toggleVideo()" class="btn btn-guide">
                 <i class="fas fa-shopping-cart"></i> วิธีซื้อสคริปต์
             </button>
         </div>
 
-        <!-- กล่องแสดงวิดีโอเมื่อกดปุ่ม (เริ่มต้นจะถูกซ่อนไว้) -->
+        <!-- กล่องแสดงวิดีโอแบบเต็มจอ (เริ่มต้นจะถูกซ่อนไว้) -->
         <div id="videoContainer" class="video-box">
             <video id="myVideo" src="88e39a28-563c-4409-b9a1-cc29fe51b7c2.mp4" controls preload="metadata"></video>
         </div>
