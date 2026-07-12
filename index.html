@@ -4,11 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TEST HUB</title>
-    <!-- นำเข้าฟอนต์ Google Font (Kanit) เพื่อความโมเดิร์น -->
+    <!-- นำเข้าฟอนต์ Google Font (Kanit) -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;600&display=swap" rel="stylesheet">
-    <!-- นำเข้า Icon จาก Font Awesome สำหรับโลโก้ Discord -->
+    <!-- นำเข้า Icon จาก Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
     <style>
@@ -20,8 +20,7 @@
         }
 
         body {
-            /* พื้นหลังไล่เฉดสีมืดสไตล์อวกาศโทนม่วงแบบในรูป */
-            background: radial-gradient(circle at center, #160a2b 0%, #060309 100%);
+            background: radial-gradient(circle at center, #0c0822 0%, #030207 100%);
             min-height: 100vh;
             display: flex;
             justify-content: center;
@@ -31,45 +30,44 @@
             overflow-x: hidden;
         }
 
-        /* การ์ดสไตล์ Glassmorphism ผสมนีออน */
+        /* การ์ดสไตล์คุมโทนดาร์กม่วงตัดฟ้า */
         .card {
-            background: rgba(19, 9, 34, 0.75);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(138, 43, 226, 0.2);
+            background: rgba(15, 10, 30, 0.8);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(0, 210, 255, 0.15);
             border-radius: 24px;
             width: 100%;
             max-width: 480px;
             padding: 40px 30px;
             text-align: center;
-            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6), 
-                        0 0 40px rgba(114, 9, 183, 0.15);
-            transition: transform 0.3s ease;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.7), 
+                        0 0 30px rgba(0, 210, 255, 0.05);
         }
 
-        /* หัวข้อด้านบนสุด */
+        /* หัวข้อ TEST HUB */
         .title {
-            font-size: 2.5rem;
+            font-size: 2.6rem;
             font-weight: 600;
             letter-spacing: 2px;
             color: #ffffff;
-            text-shadow: 0 0 10px rgba(188, 19, 254, 0.6),
-                         0 0 20px rgba(188, 19, 254, 0.3);
+            text-shadow: 0 0 10px rgba(0, 210, 255, 0.6),
+                         0 0 20px rgba(188, 19, 254, 0.4);
             margin-bottom: 10px;
         }
 
-        /* คำอธิบายใต้หัวข้อ (แทนรูปภาพ) */
+        /* คำอธิบาย */
         .description {
-            font-size: 1rem;
-            color: #b0a2c7;
+            font-size: 0.95rem;
+            color: #b3a9c9;
             font-weight: 300;
             line-height: 1.6;
             margin-bottom: 25px;
         }
 
-        /* ตัวแบ่งเส้นตกแต่งแบบในรูป */
+        /* เส้นแบ่ง */
         .divider {
             height: 1px;
-            background: linear-gradient(90deg, transparent, rgba(188, 19, 254, 0.5), transparent);
+            background: linear-gradient(90deg, transparent, rgba(0, 210, 255, 0.5), transparent);
             margin-bottom: 25px;
             position: relative;
         }
@@ -79,37 +77,60 @@
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            color: #bc13fe;
+            color: #00d2ff;
             font-size: 0.8rem;
-            background: #130922;
+            background: #0f0a1e;
             padding: 0 8px;
         }
 
-        /* กล่องใส่วิดีโอ */
+        /* กล่องใส่วิดีโอ + Animation ไฟฟ้าสีฟ้าวิ่งไปมา */
         .video-container {
             width: 100%;
             border-radius: 14px;
             overflow: hidden;
-            border: 1px solid rgba(188, 19, 254, 0.3);
-            box-shadow: 0 0 15px rgba(188, 19, 254, 0.1);
+            border: 2px solid #00d2ff;
             margin-bottom: 30px;
-            aspect-ratio: 16 / 9; /* ล็อคอัตราส่วนวิดีโอ */
+            aspect-ratio: 16 / 9;
             background: #000;
-        }
-        .video-container iframe, .video-container video {
-            width: 100%;
-            height: 100%;
-            border: none;
+            position: relative;
+            /* เรียกใช้งานแอนิเมชันแสงไฟฟ้านีออนเสมือนมีกระแสไฟวิ่ง */
+            animation: electric-pulse 3s infinite ease-in-out;
         }
 
-        /* ส่วนของกลุ่มปุ่ม */
+        /* ตัวเล่นวิดีโอ MP4 */
+        .video-container video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* แอนิเมชันแสงไฟฟ้านีออนสีฟ้าพริ้วไหว */
+        @keyframes electric-pulse {
+            0% {
+                box-shadow: 0 0 12px rgba(0, 210, 255, 0.6), inset 0 0 8px rgba(0, 210, 255, 0.3);
+                border-color: #00d2ff;
+            }
+            33% {
+                box-shadow: 0 0 25px rgba(0, 102, 255, 0.8), inset 0 0 15px rgba(0, 102, 255, 0.4);
+                border-color: #0066ff;
+            }
+            66% {
+                box-shadow: 0 0 18px rgba(0, 255, 213, 0.7), inset 0 0 10px rgba(0, 255, 213, 0.3);
+                border-color: #00ffd5;
+            }
+            100% {
+                box-shadow: 0 0 12px rgba(0, 210, 255, 0.6), inset 0 0 8px rgba(0, 210, 255, 0.3);
+                border-color: #00d2ff;
+            }
+        }
+
+        /* โซนปุ่มกด */
         .button-group {
             display: flex;
             flex-direction: column;
             gap: 15px;
         }
 
-        /* สไตล์ปุ่มพื้นฐาน */
         .btn {
             display: flex;
             justify-content: center;
@@ -125,36 +146,34 @@
             cursor: pointer;
         }
 
-        /* ปุ่มที่ 1: Discord (ไล่เฉดสีม่วงนีออนแบบในรูปภาพตัวอย่าง) */
+        /* ปุ่มที่ 1: Discord */
         .btn-discord {
-            background: linear-gradient(135deg, #7300ff 0%, #bd00ff 100%);
+            background: linear-gradient(135deg, #5865F2 0%, #854cee 100%);
             color: #ffffff;
-            box-shadow: 0 4px 20px rgba(189, 0, 255, 0.4),
-                        inset 0 0 10px rgba(255, 255, 255, 0.2);
+            box-shadow: 0 4px 20px rgba(88, 101, 242, 0.4);
         }
         .btn-discord:hover {
             transform: translateY(-3px);
-            box-shadow: 0 6px 25px rgba(189, 0, 255, 0.6),
-                        inset 0 0 15px rgba(255, 255, 255, 0.3);
+            box-shadow: 0 6px 25px rgba(88, 101, 242, 0.6);
         }
 
-        /* ปุ่มที่ 2: วิธีซื้อสคริปต์ (สไตล์โปร่งแสงขอบนีออน) */
+        /* ปุ่มที่ 2: วิธีซื้อสคริปต์ (ปรับเป็นขอบฟ้าให้เข้ากับวิดีโอ) */
         .btn-guide {
-            background: rgba(255, 255, 255, 0.03);
-            color: #dcb5ff;
-            border: 1px solid rgba(188, 19, 254, 0.4);
-            box-shadow: inset 0 0 10px rgba(188, 19, 254, 0.1);
+            background: rgba(255, 255, 255, 0.02);
+            color: #aae7ff;
+            border: 1px solid rgba(0, 210, 255, 0.4);
+            box-shadow: inset 0 0 10px rgba(0, 210, 255, 0.05);
         }
         .btn-guide:hover {
-            background: rgba(188, 19, 254, 0.1);
+            background: rgba(0, 210, 255, 0.1);
             color: #ffffff;
-            border-color: #hd00ff;
+            border-color: #00d2ff;
             transform: translateY(-3px);
-            box-shadow: 0 0 15px rgba(188, 19, 254, 0.3);
+            box-shadow: 0 0 15px rgba(0, 210, 255, 0.3);
         }
 
         .btn i {
-            font-size: 1.3rem;
+            font-size: 1.2rem;
         }
     </style>
 </head>
@@ -164,29 +183,28 @@
         <!-- หัวข้อหลัก -->
         <div class="title">TEST HUB</div>
         
-        <!-- คำอธิบายแทนรูปภาพ -->
+        <!-- คำอธิบายด้านบนสุด -->
         <p class="description">
-            ยินดีต้อนรับสู่ TEST HUB แหล่งรวบรวมสคริปต์ที่ดีที่สุด ปลอดภัย เสถียร และอัปเดตใหม่ตลอดเวลา เลือกเมนูด้านล่างเพื่อเข้าร่วมชุมชนหรือดูขั้นตอนการสั่งซื้อได้เลยครับ
+            ยินดีต้อนรับสู่ TEST HUB แหล่งรวบรวมสคริปต์ที่มีประสิทธิภาพและเสถียรที่สุด สามารถเข้าร่วมชุมชนหรือดูขั้นตอนการสั่งซื้อที่ปุ่มด้านล่างได้ทันที
         </p>
 
         <!-- เส้นแบ่งดีไซน์ -->
         <div class="divider"></div>
 
-        <!-- โซนวิดีโอ (เปลี่ยน URL ตรง src ได้ตามต้องการ) -->
+        <!-- โซนเล่นวิดีโอ MP4 ของคุณ -->
         <div class="video-container">
-            <!-- ตัวอย่าง: ใช้ลิงก์ YouTube Embed (อย่าลืมเปลี่ยนหลัง /embed/ เป็น ID คลิปของคุณ) -->
-            <iframe src="https://www.youtube.com/embed/dQw4w9WgXcQ" allowfullscreen></iframe>
+            <video src="88e39a28-563c-4409-b9a1-cc29fe51b7c2.mp4" controls preload="metadata"></video>
         </div>
 
         <!-- กลุ่มปุ่มกด -->
         <div class="button-group">
-            <!-- ปุ่มที่ 1: ลิงก์ Discord (ใส่ลิงก์เชิญของคุณตรง href) -->
-            <a href="https://discord.gg/YOUR_INVITE_LINK" target="_blank" class="btn btn-discord">
+            <!-- ปุ่มที่ 1: ลิงก์เข้า Discord -->
+            <a href="https://discord.gg/ใส่ลิงก์ดิสคอร์ดของคุณตรงนี้" target="_blank" class="btn btn-discord">
                 <i class="fab fa-discord"></i> เข้าร่วม Discord
             </a>
 
-            <!-- ปุ่มที่ 2: วิธีซื้อสคริปต์ (ใส่ลิงก์คู่มือหรือหน้าเว็บสั่งซื้อตรง href) -->
-            <a href="https://your-website.com/how-to-buy" target="_blank" class="btn btn-guide">
+            <!-- ปุ่มที่ 2: วิธีซื้อสคริปต์ -->
+            <a href="https://ใส่ลิงก์วิธีซื้อตรงนี้" target="_blank" class="btn btn-guide">
                 <i class="fas fa-shopping-cart"></i> วิธีซื้อสคริปต์
             </a>
         </div>
