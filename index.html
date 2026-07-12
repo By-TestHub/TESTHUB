@@ -20,7 +20,8 @@
         }
 
         body {
-            background: radial-gradient(circle at center, #0c0822 0%, #030207 100%);
+            /* ปรับพื้นหลังให้เป็นโทนน้ำเงิน-ดำ ฟ้าไฟฟ้า */
+            background: radial-gradient(circle at center, #001a33 0%, #020813 100%);
             min-height: 100vh;
             display: flex;
             justify-content: center;
@@ -30,44 +31,44 @@
             overflow-x: hidden;
         }
 
-        /* การ์ดสไตล์คุมโทนดาร์กม่วงตัดฟ้า */
+        /* การ์ดสไตล์คุมโทนฟ้าไฟฟ้านีออน */
         .card {
-            background: rgba(15, 10, 30, 0.8);
+            background: rgba(4, 16, 35, 0.85);
             backdrop-filter: blur(12px);
-            border: 1px solid rgba(0, 210, 255, 0.15);
+            border: 1px solid rgba(0, 210, 255, 0.3);
             border-radius: 24px;
             width: 100%;
             max-width: 480px;
             padding: 40px 30px;
             text-align: center;
-            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.7), 
-                        0 0 30px rgba(0, 210, 255, 0.05);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.8), 
+                        0 0 35px rgba(0, 210, 255, 0.15);
         }
 
-        /* หัวข้อ TEST HUB */
+        /* หัวข้อ TEST HUB สีฟ้าเรืองแสง */
         .title {
-            font-size: 2.6rem;
+            font-size: 2.8rem;
             font-weight: 600;
             letter-spacing: 2px;
-            color: #ffffff;
-            text-shadow: 0 0 10px rgba(0, 210, 255, 0.6),
-                         0 0 20px rgba(188, 19, 254, 0.4);
-            margin-bottom: 10px;
+            color: #00d2ff;
+            text-shadow: 0 0 10px rgba(0, 210, 255, 0.8),
+                         0 0 20px rgba(0, 102, 255, 0.5);
+            margin-bottom: 12px;
         }
 
         /* คำอธิบาย */
         .description {
             font-size: 0.95rem;
-            color: #b3a9c9;
+            color: #a4c2ec;
             font-weight: 300;
             line-height: 1.6;
             margin-bottom: 25px;
         }
 
-        /* เส้นแบ่ง */
+        /* เส้นแบ่งดีไซน์นีออนฟ้า */
         .divider {
             height: 1px;
-            background: linear-gradient(90deg, transparent, rgba(0, 210, 255, 0.5), transparent);
+            background: linear-gradient(90deg, transparent, rgba(0, 210, 255, 0.6), transparent);
             margin-bottom: 25px;
             position: relative;
         }
@@ -79,49 +80,9 @@
             transform: translate(-50%, -50%);
             color: #00d2ff;
             font-size: 0.8rem;
-            background: #0f0a1e;
+            background: #041023;
             padding: 0 8px;
-        }
-
-        /* กล่องใส่วิดีโอ + Animation ไฟฟ้าสีฟ้าวิ่งไปมา */
-        .video-container {
-            width: 100%;
-            border-radius: 14px;
-            overflow: hidden;
-            border: 2px solid #00d2ff;
-            margin-bottom: 30px;
-            aspect-ratio: 16 / 9;
-            background: #000;
-            position: relative;
-            /* เรียกใช้งานแอนิเมชันแสงไฟฟ้านีออนเสมือนมีกระแสไฟวิ่ง */
-            animation: electric-pulse 3s infinite ease-in-out;
-        }
-
-        /* ตัวเล่นวิดีโอ MP4 */
-        .video-container video {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-
-        /* แอนิเมชันแสงไฟฟ้านีออนสีฟ้าพริ้วไหว */
-        @keyframes electric-pulse {
-            0% {
-                box-shadow: 0 0 12px rgba(0, 210, 255, 0.6), inset 0 0 8px rgba(0, 210, 255, 0.3);
-                border-color: #00d2ff;
-            }
-            33% {
-                box-shadow: 0 0 25px rgba(0, 102, 255, 0.8), inset 0 0 15px rgba(0, 102, 255, 0.4);
-                border-color: #0066ff;
-            }
-            66% {
-                box-shadow: 0 0 18px rgba(0, 255, 213, 0.7), inset 0 0 10px rgba(0, 255, 213, 0.3);
-                border-color: #00ffd5;
-            }
-            100% {
-                box-shadow: 0 0 12px rgba(0, 210, 255, 0.6), inset 0 0 8px rgba(0, 210, 255, 0.3);
-                border-color: #00d2ff;
-            }
+            text-shadow: 0 0 5px #00d2ff;
         }
 
         /* โซนปุ่มกด */
@@ -129,6 +90,7 @@
             display: flex;
             flex-direction: column;
             gap: 15px;
+            margin-bottom: 20px;
         }
 
         .btn {
@@ -137,78 +99,140 @@
             align-items: center;
             gap: 10px;
             width: 100%;
-            padding: 14px 20px;
+            padding: 15px 20px;
             font-size: 1.1rem;
             font-weight: 600;
             text-decoration: none;
             border-radius: 14px;
-            transition: all 0.3s ease;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             cursor: pointer;
+            border: none;
         }
 
         /* ปุ่มที่ 1: Discord */
         .btn-discord {
-            background: linear-gradient(135deg, #5865F2 0%, #854cee 100%);
+            background: linear-gradient(135deg, #5865F2 0%, #3a47c7 100%);
             color: #ffffff;
-            box-shadow: 0 4px 20px rgba(88, 101, 242, 0.4);
+            box-shadow: 0 4px 20px rgba(88, 101, 242, 0.3);
         }
         .btn-discord:hover {
             transform: translateY(-3px);
-            box-shadow: 0 6px 25px rgba(88, 101, 242, 0.6);
+            box-shadow: 0 6px 25px rgba(88, 101, 242, 0.5);
         }
 
-        /* ปุ่มที่ 2: วิธีซื้อสคริปต์ (ปรับเป็นขอบฟ้าให้เข้ากับวิดีโอ) */
+        /* ปุ่มที่ 2: วิธีซื้อสคริปต์ (เน้นสีฟ้าเรืองแสงไฟฟ้า) */
         .btn-guide {
-            background: rgba(255, 255, 255, 0.02);
-            color: #aae7ff;
-            border: 1px solid rgba(0, 210, 255, 0.4);
-            box-shadow: inset 0 0 10px rgba(0, 210, 255, 0.05);
+            background: linear-gradient(135deg, #0099ff 0%, #00d2ff 100%);
+            color: #ffffff;
+            box-shadow: 0 4px 20px rgba(0, 210, 255, 0.4);
         }
         .btn-guide:hover {
-            background: rgba(0, 210, 255, 0.1);
-            color: #ffffff;
-            border-color: #00d2ff;
             transform: translateY(-3px);
-            box-shadow: 0 0 15px rgba(0, 210, 255, 0.3);
+            box-shadow: 0 6px 25px rgba(0, 210, 255, 0.7),
+                        0 0 15px rgba(0, 210, 255, 0.4);
         }
 
         .btn i {
             font-size: 1.2rem;
+        }
+
+        /* กล่องวิธีซื้อสคริปต์ที่ซ่อนไว้ (จะแสดงเมื่อกดปุ่ม) */
+        .guide-box {
+            max-height: 0;
+            opacity: 0;
+            overflow: hidden;
+            transition: all 0.5s ease-in-out;
+            background: rgba(0, 40, 80, 0.4);
+            border: 1px solid rgba(0, 210, 255, 0);
+            border-radius: 14px;
+            text-align: left;
+            padding: 0 20px;
+            box-shadow: inset 0 0 15px rgba(0, 210, 255, 0.05);
+        }
+
+        /* คลาสที่จะถูกใส่เพิ่มเมื่อคลิกเพื่อแสดงผล */
+        .guide-box.show {
+            max-height: 400px; /* ขยายความสูงให้แสดงเนื้อหา */
+            opacity: 1;
+            padding: 20px;
+            margin-top: 15px;
+            border-color: rgba(0, 210, 255, 0.4);
+            box-shadow: inset 0 0 15px rgba(0, 210, 255, 0.1),
+                        0 0 15px rgba(0, 210, 255, 0.05);
+        }
+
+        .guide-title {
+            color: #00d2ff;
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .guide-step {
+            font-size: 0.9rem;
+            color: #c2d8f2;
+            margin-bottom: 8px;
+            line-height: 1.5;
+            list-style: none;
+        }
+
+        .guide-step span {
+            color: #00d2ff;
+            font-weight: 600;
+            margin-right: 5px;
         }
     </style>
 </head>
 <body>
 
     <div class="card">
-        <!-- หัวข้อหลัก -->
+        <!-- หัวข้อหลักสีฟ้าไฟฟ้า -->
         <div class="title">TEST HUB</div>
         
         <!-- คำอธิบายด้านบนสุด -->
         <p class="description">
-            ยินดีต้อนรับสู่ TEST HUB แหล่งรวบรวมสคริปต์ที่มีประสิทธิภาพและเสถียรที่สุด สามารถเข้าร่วมชุมชนหรือดูขั้นตอนการสั่งซื้อที่ปุ่มด้านล่างได้ทันที
+            ยินดีต้อนรับสู่ TEST HUB แหล่งรวบรวมสคริปต์ประสิทธิภาพสูง เสถียร และปลอดภัยที่สุด เลือกกดปุ่มด้านล่างเพื่อเข้าสู่ดิสคอร์ดหรือดูขั้นตอนการสั่งซื้อได้เลย
         </p>
 
         <!-- เส้นแบ่งดีไซน์ -->
         <div class="divider"></div>
 
-        <!-- โซนเล่นวิดีโอ MP4 ของคุณ -->
-        <div class="video-container">
-            <video src="88e39a28-563c-4409-b9a1-cc29fe51b7c2.mp4" controls preload="metadata"></video>
-        </div>
-
         <!-- กลุ่มปุ่มกด -->
         <div class="button-group">
             <!-- ปุ่มที่ 1: ลิงก์เข้า Discord -->
-            <a href="https://discord.gg/ใส่ลิงก์ดิสคอร์ดของคุณตรงนี้" target="_blank" class="btn btn-discord">
+            <a href="https://discord.gg/YOUR_INVITE_LINK" target="_blank" class="btn btn-discord">
                 <i class="fab fa-discord"></i> เข้าร่วม Discord
             </a>
 
-            <!-- ปุ่มที่ 2: วิธีซื้อสคริปต์ -->
-            <a href="https://ใส่ลิงก์วิธีซื้อตรงนี้" target="_blank" class="btn btn-guide">
+            <!-- ปุ่มที่ 2: วิธีซื้อสคริปต์ (กดแล้วจะเปิดกล่องข้อความด้านล่าง) -->
+            <button onclick="toggleGuide()" class="btn btn-guide">
                 <i class="fas fa-shopping-cart"></i> วิธีซื้อสคริปต์
-            </a>
+            </button>
+        </div>
+
+        <!-- กล่องแสดงวิธีซื้อ (ถูกซ่อนไว้ในตอนแรก) -->
+        <div id="buyGuide" class="guide-box">
+            <div class="guide-title">
+                <i class="fas fa-info-circle"></i> ขั้นตอนการสั่งซื้อสคริปต์
+            </div>
+            <li class="guide-step"><span>1.</span> เข้าร่วม Discord ของเราผ่านปุ่มด้านบน</li>
+            <li class="guide-step"><span>2.</span> ไปที่ห้อง <b>#วิธีซื้อ / #shop</b> เพื่อเช็คราคาและเปิดบิล</li>
+            <li class="guide-step"><span>3.</span> โอนเงินผ่านระบบ TrueWallet /ธนาคาร ตามที่ระบุ</li>
+            <li class="guide-step"><span>4.</span> ส่งสลิปให้แอดมินตรวจสอบ จากนั้นรับคีย์หรือระบบสคริปต์ใช้งานได้ทันที!</li>
         </div>
     </div>
+
+    <!-- ส่วนของ JavaScript สั่งเปิด-ปิดกล่องคู่มือวิธีซื้อ -->
+    <script>
+        function toggleGuide() {
+            var guide = document.getElementById("buyGuide");
+            // สลับเปิดและปิดคลาส .show
+            guide.classList.toggle("show");
+        }
+    </script>
 
 </body>
 </html>
