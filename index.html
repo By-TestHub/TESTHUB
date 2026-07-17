@@ -91,64 +91,8 @@
             box-shadow: 0 6px 25px rgba(88, 101, 242, 0.6);
         }
 
-        .discord-desc {
-            font-size: 0.95rem;
-            color: #00d2ff;
-            font-weight: 300;
-            margin: 4px 0 15px 0;
-            text-shadow: 0 0 8px rgba(0, 210, 255, 0.4);
-        }
-
-        .btn-guide {
-            background: linear-gradient(135deg, #0077ff 0%, #00d2ff 100%);
-            color: #ffffff;
-            box-shadow: 0 5px 25px rgba(0, 210, 255, 0.5);
-        }
-        .btn-guide:hover {
-            transform: scale(1.02);
-            box-shadow: 0 8px 30px rgba(0, 210, 255, 0.8);
-        }
-
         .btn i {
             font-size: 1.3rem;
-        }
-
-        .video-box {
-            display: none; 
-            width: 100%;
-            max-width: 340px; 
-            margin: 25px auto 0 auto;
-            border-radius: 20px;
-            background: #000;
-            border: 2.5px solid #00d2ff;
-            overflow: hidden;
-            animation: electric-glow 2.5s infinite ease-in-out;
-        }
-
-        .video-box.active {
-            display: block;
-        }
-
-        .video-box video {
-            width: 100%;
-            height: auto;
-            display: block;
-            object-fit: contain; 
-        }
-
-        @keyframes electric-glow {
-            0% {
-                box-shadow: 0 0 15px rgba(0, 210, 255, 0.6), inset 0 0 10px rgba(0, 210, 255, 0.3);
-                border-color: #00d2ff;
-            }
-            50% {
-                box-shadow: 0 0 30px rgba(0, 150, 255, 0.9), inset 0 0 20px rgba(0, 150, 255, 0.5);
-                border-color: #0096ff;
-            }
-            100% {
-                box-shadow: 0 0 15px rgba(0, 210, 255, 0.6), inset 0 0 10px rgba(0, 210, 255, 0.3);
-                border-color: #00d2ff;
-            }
         }
 
         @media (max-width: 480px) {
@@ -162,54 +106,22 @@
                 font-size: 1.1rem;
                 padding: 14px 15px;
             }
-            .video-box {
-                max-width: 100%; 
-            }
         }
     </style>
 </head>
 <body>
 
     <div class="card">
-
         <div class="title">TEST HUB</div>
         
         <div class="button-group">
-            
             <p class="top-desc">สคริปต์ฟรีที่แจกทั้งหมดอยู่ใน Discord นะครับ</p>
 
             <a href="https://discord.gg/Ttwq9Udwhc" target="_blank" class="btn btn-discord">
                 <i class="fab fa-discord"></i> เข้าร่วม Discord
             </a>
-            
-            <p class="discord-desc">หากต้องการซื้อสคริปต์ดูวิธีข้างล่าง (เข้าร่วม Discord ก่อนซื้อนะครับ)</p>
-
-            <button onclick="toggleVideoInstant()" class="btn btn-guide">
-                <i class="fas fa-shopping-cart"></i> วิธีซื้อสคริปต์
-            </button>
-            
-        </div>
-
-        <div id="videoContainer" class="video-box">
-            <video id="myVideo" src="88e39a28-563c-4409-b9a1-cc29fe51b7c2.mp4" controls preload="metadata"></video>
         </div>
     </div>
-
-    <script>
-        function toggleVideoInstant() {
-            var videoBox = document.getElementById("videoContainer");
-            var videoPlayer = document.getElementById("myVideo");
-            
-            videoBox.classList.toggle("active");
-            
-            if (!videoBox.classList.contains("active")) {
-                videoPlayer.pause();
-            } else {
-
-                videoPlayer.play();
-            }
-        }
-    </script>
 
 </body>
 </html>
